@@ -66,7 +66,7 @@ Task("Publish-DockerHub")
 });
 
 Task("Default")
-    .IsDependentOn("Docker-Build");
+    .IsDependentOn("Publish-DockerHub");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
