@@ -1,0 +1,13 @@
+parameters:
+  name: ''  # defaults for any parameters that aren't specified
+  vmImage: ''
+jobs:
+- job: ${{ parameters.name }}
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+  steps:
+  - powershell: ./build.ps1 -script build.cake -target Default
+    displayName: 'Cake build'
+    env:
+      DOCKER_USERNAME: $(DOCKER_USERNAME)
+      DOCKER_PASSWORD: $(DOCKER_PASSWORD)

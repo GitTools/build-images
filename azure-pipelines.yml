@@ -1,0 +1,11 @@
+jobs:
+
+- template: jobs.yml
+  parameters:
+    name: Linux
+    vmImage: 'Ubuntu 16.04'
+
+- template: jobs.yml
+  parameters:
+    name: Windows
+    vmImage: 'windows-2019'
