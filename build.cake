@@ -17,9 +17,12 @@ ICollection<DockerImage> images;
 Setup(context =>
 {
     var dockerFiles = GetFiles("./src/**/Dockerfile").ToArray();
+    var version = Argument("dotnet_version", "").ToLower();
+    var variant = Argument("dotnet_variant", "").ToLower();
 
-    var versions = new[] { "2.1", "2.2" };
-    var variants = new[] { "sdk", "runtime" };
+    Information($"Version: {version}, Variant: {variant}");
+    var versions = string.IsNullOrWhiteSpace(version) ? new[] { "2.1", "2.2" } : new[] { version };
+    var variants = string.IsNullOrWhiteSpace(variant) ? new[] { "sdk", "runtime" } : new[] { variant };
     var docker = DockerImages.GetDockerImages(context, dockerFiles, versions, variants);
 
     images = IsRunningOnWindows()

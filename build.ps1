@@ -40,6 +40,8 @@ Param(
     [string]$Verbosity = "Verbose",
     [Alias("DryRun","Noop")]
     [switch]$WhatIf,
+    [string]$Version,
+    [string]$Variant,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
     [string[]]$ScriptArgs
 )
@@ -175,6 +177,8 @@ else {
 $Arguments = @{
     target=$Target;
     configuration=$Configuration;
+    dotnet_version=$Version;
+    dotnet_variant=$Variant;
     verbosity=$Verbosity;
     dryrun=$WhatIf;
     nuget_useinprocessclient=$true;
