@@ -100,3 +100,4 @@ tools/*
 .dotnet
 .cake
 artifacts
+Dockerfile.build

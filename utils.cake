@@ -92,15 +92,32 @@ void DockerBuild(DockerImage dockerImage)
     var (os, distro, version, variant) = dockerImage;
     var workDir = DirectoryPath.FromString($"./src/{os}/{distro}");
 
-        var tags = GetDockerTags(dockerImage);
+    var tags = GetDockerTags(dockerImage);
+    var content = FileReadText($"{workDir}/Dockerfile");
+    if (variant == "sdk") {
+        content += "\nRUN dotnet tool install powershell --global";
+        if (os == "windows") {
+            content += @"
+
+USER ContainerAdministrator
+RUN setx /M PATH ""%PATH%;C:\Users\ContainerUser\.dotnet\tools""
+USER ContainerUser
+";
+        }
+        else {
+            content += "\nRUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh";
+        }
+    }
+
+    FileWriteText($"{workDir}/Dockerfile.build", content);
 
     var buildSettings = new DockerImageBuildSettings
     {
         Rm = true,
         Tag = tags,
-        File = $"{workDir}/Dockerfile",
+        File = $"{workDir}/Dockerfile.build",
         BuildArg = new []{ $"DOTNET_VERSION={version}", $"DOTNET_VARIANT={variant}" },
-        // Pull = true,
+        Pull = true,
     };
 
     DockerBuild(buildSettings, workDir.ToString());

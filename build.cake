@@ -3,6 +3,7 @@
 
 // Install addins.
 #addin "nuget:?package=Cake.Docker&version=0.10.0"
+#addin "nuget:?package=Cake.FileHelpers&version=3.2.0"
 #addin "nuget:?package=Cake.Incubator&version=5.0.1"
 
 // Load other scripts.
