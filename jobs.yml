@@ -8,14 +8,14 @@ jobs:
       'sdk 2.1':
         DOTNET_VERSION: '2.1'
         DOTNET_VARIANT: 'sdk'
-      'sdk 3.0':
-        DOTNET_VERSION: '3.0'
+      'sdk 3.1':
+        DOTNET_VERSION: '3.1'
         DOTNET_VARIANT: 'sdk'
       'runtime 2.1':
         DOTNET_VERSION: '2.1'
         DOTNET_VARIANT: 'runtime'
-      'runtime 3.0':
-        DOTNET_VERSION: '3.0'
+      'runtime 3.1':
+        DOTNET_VERSION: '3.1'
         DOTNET_VARIANT: 'runtime'
     maxParallel: 4
   pool:
