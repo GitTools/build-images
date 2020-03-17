@@ -9,7 +9,7 @@ jobs:
         DOTNET_VERSION: '2.1'
         DOTNET_VARIANT: 'sdk'
       'sdk 3.1':
-        DOTNET_VERSION: '3.1.102'
+        DOTNET_VERSION: '3.1'
         DOTNET_VARIANT: 'sdk'
       'runtime 2.1':
         DOTNET_VERSION: '2.1'
