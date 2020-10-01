@@ -18,6 +18,7 @@ RUN apt-get update \
 
 RUN apt-get update \
     && apt-get install -y dotnet-$DOTNET_VARIANT-$DOTNET_VERSION \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y git \
+    && rm -rf /var/lib/apt/lists/* 
 
 WORKDIR /app

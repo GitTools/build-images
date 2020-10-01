@@ -7,4 +7,6 @@ LABEL maintainers="GitTools Maintainers"
 
 ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 
+RUN apk add --no-cache git
+
 WORKDIR /app
