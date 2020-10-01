@@ -7,4 +7,8 @@ LABEL maintainers="GitTools Maintainers"
 
 ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 
+RUN apt-get update \
+    && apt-get install -y git \
+    && rm -rf /var/lib/apt/lists/* 
+
 WORKDIR /app

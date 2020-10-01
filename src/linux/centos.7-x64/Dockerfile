@@ -13,6 +13,7 @@ RUN rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-pro
     && yum update cache
 
 RUN yum install -y dotnet-$DOTNET_VARIANT-$DOTNET_VERSION.x86_64 \
+    && yum install -y git \
     && yum clean all \
     && rm -rf /tmp/*
 
