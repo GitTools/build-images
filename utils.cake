@@ -147,7 +147,7 @@ string[] GetDockerTags(DockerImage dockerImage) {
         $"{name}:{distro}-{variant}-{version}",
     };
 
-    if (version == "3.1") {
+    if (version == "5.0") {
         tags.AddRange(new[] {
             $"{name}:{distro}-{variant}-latest",
         });
