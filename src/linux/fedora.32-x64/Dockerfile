@@ -1,6 +1,6 @@
 ARG DOTNET_VERSION='2.1'
 ARG DOTNET_VARIANT='sdk'
-ARG TAG='30'
+ARG TAG='32'
 
 FROM fedora:$TAG
 LABEL maintainers="GitTools Maintainers"

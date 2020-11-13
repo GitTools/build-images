@@ -1,6 +1,6 @@
 ARG DOTNET_VERSION='2.1'
 ARG DOTNET_VARIANT='sdk'
-ARG TAG='alpine3.10'
+ARG TAG='alpine3.12'
 
 FROM mcr.microsoft.com/dotnet/$DOTNET_VARIANT:$DOTNET_VERSION-$TAG
 LABEL maintainers="GitTools Maintainers"
