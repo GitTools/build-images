@@ -97,7 +97,10 @@ void DockerBuild(DockerImage dockerImage)
     if (variant == "sdk") {
         content += "\nRUN dotnet tool install powershell --global";
         if (version == "2.1") {
-            content += " --version 6.2.4";
+            content += " --version 6.2.7";
+        }
+        if (version == "3.1") {
+            content += " --version 7.0.3";
         }
         if (os == "windows") {
             content += @"
