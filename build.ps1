@@ -42,6 +42,7 @@ Param(
     [switch]$WhatIf,
     [string]$Version,
     [string]$Variant,
+    [string]$Distro,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
     [string[]]$ScriptArgs
 )
@@ -179,6 +180,7 @@ $Arguments = @{
     configuration=$Configuration;
     dotnet_version=$Version;
     dotnet_variant=$Variant;
+    dotnet_distro=$distro;
     verbosity=$Verbosity;
     dryrun=$WhatIf;
     nuget_useinprocessclient=$true;

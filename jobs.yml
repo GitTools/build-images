@@ -1,28 +1,18 @@
-parameters:
-  name: ''  # defaults for any parameters that aren't specified
-  vmImage: ''
-jobs:
-- job: ${{ parameters.name }}
-  strategy:
-    matrix:
-      'sdk 3.1':
-        DOTNET_VERSION: '3.1'
-        DOTNET_VARIANT: 'sdk'
-      'sdk 5.0':
-        DOTNET_VERSION: '5.0'
-        DOTNET_VARIANT: 'sdk'
-      'runtime 3.1':
-        DOTNET_VERSION: '3.1'
-        DOTNET_VARIANT: 'runtime'
-      'runtime 5.0':
-        DOTNET_VERSION: '5.0'
-        DOTNET_VARIANT: 'runtime'
-    maxParallel: 4
-  pool:
-    vmImage: ${{ parameters.vmImage }}
-  steps:
-  - powershell: ./build.ps1 -script build.cake -target Default -version $(DOTNET_VERSION) -variant $(DOTNET_VARIANT)
-    displayName: 'Cake build'
-    env:
-      DOCKER_USERNAME: $(DOCKER_USERNAME)
-      DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+stages:
+- ${{ each variant in parameters.variants }}:
+    - ${{ each version in parameters.versions }}:
+        - stage:
+          dependsOn: []
+          displayName: '${{ variant }}:${{ version }}'
+          jobs:
+          - ${{ each distro in parameters.distros }}:
+            - job:
+              displayName: '${{ distro }}'
+              pool:
+                vmImage: ${{ parameters.vmImage }}
+              steps:
+                - pwsh: ./build.ps1 -script build.cake -target Default -version ${{ version }} -variant ${{ variant }} -distro ${{ distro }}
+                  displayName: 'Cake build'
+                  env:
+                    DOCKER_USERNAME: $(DOCKER_USERNAME)
+                    DOCKER_PASSWORD: $(DOCKER_PASSWORD)

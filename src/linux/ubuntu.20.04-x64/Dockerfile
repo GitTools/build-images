@@ -1,4 +1,4 @@
-ARG DOTNET_VERSION='2.1'
+ARG DOTNET_VERSION='3.1'
 ARG DOTNET_VARIANT='sdk'
 ARG TAG='20.04'
 
@@ -17,6 +17,6 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y dotnet-$DOTNET_VARIANT-$DOTNET_VERSION \
     && apt-get install -y git \
-    && rm -rf /var/lib/apt/lists/* 
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

@@ -6,14 +6,11 @@ schedules:
     include:
     - master
 
-jobs:
+stages:
 
 - template: jobs.yml
   parameters:
-    name: Linux
     vmImage: 'ubuntu-latest'
-
-- template: jobs.yml
-  parameters:
-    name: Windows
-    vmImage: 'windows-latest'
+    distros: [ 'alpine.3.12-x64', 'centos.7-x64', 'debian.9-x64', 'debian.10-x64', 'fedora.33-x64', 'ubuntu.16.04-x64', 'ubuntu.18.04-x64', 'ubuntu.20.04-x64' ]
+    versions: [ '3.1', '5.0' ]
+    variants: [ 'sdk', 'runtime' ]
