@@ -91,9 +91,7 @@ void DockerBuild(DockerImage dockerImage)
         if (version == "3.1") {
             content += " --version 7.0.3";
         }
-        else {
-            content += "\nRUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh";
-        }
+        content += "\nRUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh";
     }
 
     FileWriteText($"{workDir}/Dockerfile.build", content);
