@@ -22,7 +22,7 @@ Setup(context =>
     var variant = Argument("dotnet_variant", "").ToLower();
 
     Information($"Version: {version}, Variant: {variant}");
-    var versions = string.IsNullOrWhiteSpace(version) ? new[] { "2.1", "3.0", "5.0" } : new[] { version };
+    var versions = string.IsNullOrWhiteSpace(version) ? new[] { "3.1", "5.0" } : new[] { version };
     var variants = string.IsNullOrWhiteSpace(variant) ? new[] { "sdk", "runtime" } : new[] { variant };
     var docker = DockerImages.GetDockerImages(context, dockerFiles, versions, variants);
 
