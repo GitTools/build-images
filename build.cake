@@ -25,7 +25,13 @@ Setup(context =>
     Information($"Version: {version}, Variant: {variant}");
     var versions = string.IsNullOrWhiteSpace(version) ? new[] { "3.1", "5.0" } : new[] { version };
     var variants = string.IsNullOrWhiteSpace(variant) ? new[] { "sdk", "runtime" } : new[] { variant };
-    var distros  = string.IsNullOrWhiteSpace(distro) ? new[] { "alpine.3.12-x64", "centos.7-x64", "debian.9-x64", "debian.10-x64", "fedora.33-x64", "ubuntu.16.04-x64", "ubuntu.18.04-x64", "ubuntu.20.04-x64" } : new[] { distro };
+    var distros  = string.IsNullOrWhiteSpace(distro) 
+        ? new[] { 
+            "alpine.3.12-x64", "centos.7-x64", "centos.8-x64", 
+            "debian.9-x64", "debian.10-x64", "fedora.33-x64", 
+            "ubuntu.16.04-x64", "ubuntu.18.04-x64", "ubuntu.20.04-x64" 
+        } 
+        : new[] { distro };
     var docker = DockerImages.GetDockerImages(context, dockerFiles, versions, variants, distros);
 
     images = docker.All;
