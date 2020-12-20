@@ -85,7 +85,11 @@ void DockerBuild(DockerImage dockerImage)
     var workDir = DirectoryPath.FromString($"./src/linux/{distro}");
 
     var tags = GetDockerTags(dockerImage);
-    var content = FileReadText($"{workDir}/Dockerfile");
+    var dockerfile = $"{workDir}/Dockerfile";
+    if (version == "3.1" && distro.StartsWith("fedora")) {
+        dockerfile += ".3.1";
+    }
+    var content = FileReadText(dockerfile);
     if (variant == "sdk") {
         content += "\nRUN dotnet tool install powershell --global";
         if (version == "3.1") {

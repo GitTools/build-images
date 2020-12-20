@@ -1,0 +1,16 @@
+ARG DOTNET_VERSION='3.1'
+ARG DOTNET_VARIANT='sdk'
+ARG TAG='33'
+
+FROM fedora:$TAG
+LABEL maintainers="GitTools Maintainers"
+
+ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+ARG DOTNET_VERSION
+ARG DOTNET_VARIANT
+
+RUN dnf install -y dotnet-$DOTNET_VARIANT-$DOTNET_VERSION \
+    && dnf install -y git \
+    && rm -rf /tmp/*
+
+WORKDIR /app
