@@ -1,0 +1,21 @@
+stages:
+- ${{ each distro in parameters.distros }}:
+  - stage:
+    dependsOn: []
+    displayName: '${{ distro }}'
+    jobs:
+    - ${{ each version in parameters.versions }}:
+      - ${{ each tag in parameters.tags }}:
+        - job:
+          displayName: '${{ tag }} - netcoreapp${{ version }}'
+          pool:
+            vmImage: ${{ parameters.vmImage }}
+          steps:
+          - task: Docker@2
+            displayName: 'Docker login'
+            inputs:
+              containerRegistry: 'DockerHub'
+              command: 'login'
+              addPipelineData: false
+          - pwsh: ./recovery/build.ps1 -os ${{ parameters.os }} -distro ${{ distro }} -version ${{ version }} -tag ${{ tag }}
+            displayName: 'Docker build & push'
