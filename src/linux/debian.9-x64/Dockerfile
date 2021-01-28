@@ -17,6 +17,14 @@ RUN apt-get update \
     && wget -q https://packages.microsoft.com/config/debian/9/prod.list \
     && mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
 
+# Install ca-certificates from bullseye repository: https://github.com/NuGet/Announcements/issues/49
+RUN echo "deb http://deb.debian.org/debian bullseye main" >> /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+         ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && sed -i '$ d' /etc/apt/sources.list
+
 RUN apt-get update \
     && apt-get install -y dotnet-$DOTNET_VARIANT-$DOTNET_VERSION \
     && apt-get install -y git \
