@@ -101,3 +101,5 @@ tools/*
 .cake
 artifacts
 Dockerfile.build
+
+build/build/tools/
