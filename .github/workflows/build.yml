@@ -66,9 +66,17 @@ jobs:
       if: success() && github.event_name != 'pull_request'
       uses: docker/login-action@v1
       with:
-        username: ${{ secrets.DOCKERHUB_DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_DOCKER_PASSWORD }}
+        username: ${{ secrets.DH_DOCKER_USERNAME }}
+        password: ${{ secrets.DH_DOCKER_PASSWORD }}
+    # -
+    #   name: '[Push Docker images]'
+    #   if: success() && github.event_name != 'pull_request'
+    #   shell: pwsh
+    #   run: dotnet run/build.dll --target=DockerPush --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }} --exclusive
     -
-      name: '[Push Docker images]'
-      shell: pwsh
-      run: dotnet run/build.dll --target=DockerPush --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }} --exclusive
+      name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
