@@ -1,3 +1,4 @@
+using System.Linq;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Docker;
@@ -21,7 +22,9 @@ public sealed class DockerBuild : FrostingTask<BuildContext>
         var (distro, version, variant) = dockerImage;
         var workDir = DirectoryPath.FromString($"./src/linux/{distro}");
 
-        var tags = dockerImage.GetDockerTagsForRepository(Constants.DockerHubPrefix);
+        var dockerhubTags = dockerImage.GetDockerTagsForRepository(Constants.DockerHubRegistry);
+        var githubTags = dockerImage.GetDockerTagsForRepository(Constants.GitHubContainerRegistry);
+
         var dockerfile = $"{workDir}/Dockerfile";
         if (version == "3.1" && distro.StartsWith("fedora"))
         {
@@ -43,7 +46,7 @@ public sealed class DockerBuild : FrostingTask<BuildContext>
         var buildSettings = new DockerImageBuildSettings
         {
             Rm = true,
-            Tag = tags,
+            Tag = dockerhubTags.Union(githubTags).ToArray(),
             File = $"{workDir}/Dockerfile.build",
             BuildArg = new[] { $"DOTNET_VERSION={version}", $"DOTNET_VARIANT={variant}" },
             Pull = true,

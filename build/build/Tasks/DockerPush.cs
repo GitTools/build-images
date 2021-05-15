@@ -15,9 +15,9 @@ public sealed class DockerPush : FrostingTask<BuildContext>
         }
     }
 
-    private static void PushDockerImage(ICakeContext context, DockerImage dockerImage)
+    private static void PushDockerImage(BuildContext context, DockerImage dockerImage)
     {
-        var tags = dockerImage.GetDockerTagsForRepository(Constants.DockerHubPrefix);
+        var tags = dockerImage.GetDockerTagsForRepository(context.DockerRepository);
 
         foreach (var tag in tags)
         {

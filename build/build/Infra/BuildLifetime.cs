@@ -22,9 +22,9 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
         "ubuntu.20.04-x64"
     };
 
-
     public override void Setup(BuildContext context)
     {
+        var dockerRegistry = context.Argument("docker_registry", "").ToLower();
         var dotnetVersion = context.Argument("dotnet_version", "").ToLower();
         var dotnetVariant = context.Argument("dotnet_variant", "").ToLower();
         var dockerDistro = context.Argument("dotnet_distro", "").ToLower();
@@ -39,6 +39,13 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
                          from variant in variants
                          from distro in distros
                          select new DockerImage(distro, version, variant);
+
+        context.DockerRepository = dockerRegistry.ToLower() switch
+        {
+            "dockerhub" => Constants.DockerHubRegistry,
+            "github" => Constants.GitHubContainerRegistry,
+            _ => Constants.DockerHubRegistry
+        };
     }
 
     public override void Teardown(BuildContext context, ITeardownContext info)
