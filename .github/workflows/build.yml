@@ -58,7 +58,7 @@ jobs:
         path: run
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
-      name: '[Build Docker images and Push]'
+      name: '[Build Docker images]'
       shell: pwsh
       run: dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }}
     -
@@ -68,3 +68,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_DOCKER_USERNAME }}
         password: ${{ secrets.DOCKERHUB_DOCKER_PASSWORD }}
+    -
+      name: '[Push Docker images]'
+      shell: pwsh
+      run: dotnet run/build.dll --target=DockerPush --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }} --exclusive
