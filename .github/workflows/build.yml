@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  push:
+    branches:
+    - main
+    - 'feature/*'
+
+  pull_request:
+    branches:
+    - main
+
+env:
+    DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+jobs:
+  prepare:
+    name: Prepare Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+      fail-fast: false
+
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v2
+    -
+      name: Cache cake frosting
+      id: cache-cake
+      uses: actions/cache@v2.1.5
+      with:
+        path: run
+        key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+    -
+      name: '[Prepare]'
+      if: steps.cache-cake.outputs.cache-hit != 'true'
+      run: dotnet build build/CI.sln --configuration=Release
+
+#   build:
+#     name: Build
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       matrix:
+#         os: [ubuntu-latest]
+#       fail-fast: false
+
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: '[Build Docker images and Push]'
+#       shell: pwsh
+#       run: ./build.ps1 -target Pack
