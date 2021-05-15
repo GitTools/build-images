@@ -10,10 +10,6 @@ on:
     branches:
     - main
 
-env:
-    DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
 jobs:
   prepare:
     name: Prepare Build
@@ -50,7 +46,6 @@ jobs:
         version: ['5.0', '3.1']
         distro: [alpine.3.12-x64]
       fail-fast: false
-
     steps:
     -
       name: Checkout
@@ -66,3 +61,10 @@ jobs:
       name: '[Build Docker images and Push]'
       shell: pwsh
       run: dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }}
+    -
+      name: Login to DockerHub
+      if: success() && github.event_name != 'pull_request'
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_DOCKER_PASSWORD }}
