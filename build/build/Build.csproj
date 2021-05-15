@@ -1,18 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
-        <PackAsTool>true</PackAsTool>
-        <!-- Make sure start same folder .NET Core CLI and Visual Studio -->
-        <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
-        <LangVersion>9</LangVersion>
-        <RootNamespace />
-        <Nullable>enable</Nullable>
+        <AssemblyName>build</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Cake.Docker" Version="1.0.0" />
         <PackageReference Include="Cake.FileHelpers" Version="4.0.1" />
         <PackageReference Include="Cake.Frosting" Version="1.1.0" />
-        <PackageReference Include="Cake.DotNetTool.Module" Version="1.1.0" />
     </ItemGroup>
 </Project>

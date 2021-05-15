@@ -39,16 +39,30 @@ jobs:
       if: steps.cache-cake.outputs.cache-hit != 'true'
       run: dotnet build build/CI.sln --configuration=Release
 
-#   build:
-#     name: Build
-#     runs-on: ${{ matrix.os }}
-#     strategy:
-#       matrix:
-#         os: [ubuntu-latest]
-#       fail-fast: false
+  build:
+    name: Build
+    needs: [prepare]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        variant: [runtime, sdk]
+        version: ['5.0', '3.1']
+        distro: [alpine.3.12-x64]
+      fail-fast: false
 
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: '[Build Docker images and Push]'
-#       shell: pwsh
-#       run: ./build.ps1 -target Pack
+    steps:
+    -
+      name: Checkout
+      uses: actions/checkout@v2
+    -
+      name: Use cached cake frosting
+      id: cache-cake
+      uses: actions/cache@v2.1.5
+      with:
+        path: run
+        key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+    -
+      name: '[Build Docker images and Push]'
+      shell: pwsh
+      run: dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }}
