@@ -58,6 +58,10 @@ jobs:
         path: run
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+    -
       name: '[Build Docker images]'
       shell: pwsh
       run: dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }}
