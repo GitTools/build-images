@@ -16,7 +16,7 @@ public class Default : FrostingTask
         context.Information($"Available targets:{Environment.NewLine}");
         foreach (var task in tasks)
         {
-            context.Information($"./build.ps1 --target={task.GetTaskName()} # ({task.GetTaskDescription()})");
+            context.Information($"dotnet run/build.dll --target={task.GetTaskName()} # ({task.GetTaskDescription()})");
         }
     }
 }
