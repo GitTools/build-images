@@ -15,12 +15,7 @@ on:
 jobs:
   prepare:
     name: Prepare Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-      fail-fast: false
-
+    runs-on: ubuntu-latest
     steps:
     -
       name: Checkout
@@ -40,10 +35,9 @@ jobs:
   build:
     name: Build
     needs: [prepare]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         variant: [runtime, sdk]
         version: ['5.0', '3.1']
         distro: [alpine.3.12-x64, centos.7-x64, centos.8-x64, debian.9-x64, debian.10-x64, fedora.33-x64, ubuntu.16.04-x64, ubuntu.18.04-x64, ubuntu.20.04-x64]
