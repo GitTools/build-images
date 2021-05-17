@@ -26,10 +26,6 @@ public sealed class DockerBuild : FrostingTask<BuildContext>
         var githubTags = dockerImage.GetDockerTagsForRepository(Constants.GitHubContainerRegistry);
 
         var dockerfile = $"{workDir}/Dockerfile";
-        if (version == "3.1" && distro.StartsWith("fedora"))
-        {
-            dockerfile += ".3.1";
-        }
         var content = context.FileReadText(dockerfile);
         if (variant == "sdk")
         {
