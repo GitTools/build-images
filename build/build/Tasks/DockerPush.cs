@@ -1,5 +1,4 @@
-﻿using Cake.Core;
-using Cake.Docker;
+﻿using Cake.Docker;
 using Cake.Frosting;
 
 [TaskName(nameof(DockerPush))]

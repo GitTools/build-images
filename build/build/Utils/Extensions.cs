@@ -35,7 +35,7 @@ public static class Extensions
         return attribute != null ? attribute.Name : task.Name;
     }
 
-    public static string[] GetDockerTagsForRepository(this DockerImage dockerImage, string repositoryName) {
+    public static IEnumerable<string> GetDockerTagsForRepository(this DockerImage dockerImage, string repositoryName) {
         var (distro, version, variant) = dockerImage;
 
         var tags = new List<string> {
