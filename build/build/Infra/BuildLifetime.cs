@@ -11,7 +11,7 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 
     public static readonly string[] DockerDistrosToBuild =
     {
-        "alpine.3.12-x64",
+        "alpine.3.13-x64",
         "centos.7-x64",
         "centos.8-x64",
         "debian.9-x64",
