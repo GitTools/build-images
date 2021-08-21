@@ -45,6 +45,7 @@ public sealed class DockerBuild : FrostingTask<BuildContext>
             Tag = dockerhubTags.Union(githubTags).ToArray(),
             File = $"{workDir}/Dockerfile.build",
             BuildArg = new[] { $"DOTNET_VERSION={version}", $"DOTNET_VARIANT={variant}" },
+            Platform = "linux/amd64",
             Pull = true,
         };
 
