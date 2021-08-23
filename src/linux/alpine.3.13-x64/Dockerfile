@@ -1,13 +1,12 @@
-ARG DOTNET_VERSION='3.1'
-ARG DOTNET_VARIANT='sdk'
-ARG TAG='alpine3.13'
+ARG DOTNET_VERSION='5.0'
 
-FROM mcr.microsoft.com/dotnet/$DOTNET_VARIANT:$DOTNET_VERSION-$TAG
+FROM alpine:3.13
 LABEL maintainers="GitTools Maintainers"
 
-ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
-ENV DOTNET_NOLOGO=true
+USER root
+ARG DOTNET_VERSION
 
-RUN apk add --no-cache git
+# Pre-requisits
+RUN apk add bash icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib wget git && apk update
 
 WORKDIR /app

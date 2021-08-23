@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text;
 using Cake.Core;
 using Cake.Core.IO;
 using Cake.Docker;
@@ -9,6 +10,17 @@ using Cake.Frosting;
 [TaskDescription("Builds the docker images")]
 public sealed class DockerBuild : FrostingTask<BuildContext>
 {
+    private const string EnvScript = @"
+ENV PATH=$PATH:/usr/local/bin:/root/.dotnet/tools \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
+    DOTNET_NOLOGO=true \
+    DOTNET_ROOT=/usr/local/bin";
+
+    private const string InstallScript = @"
+# install dotnet
+RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh \
+    && chmod +x $HOME/dotnet-install.sh \
+    && $HOME/dotnet-install.sh --channel $DOTNET_VERSION --install-dir /usr/local/bin";
     public override void Run(BuildContext context)
     {
         foreach (var dockerImage in context.Images)
@@ -26,25 +38,32 @@ public sealed class DockerBuild : FrostingTask<BuildContext>
         var githubTags = dockerImage.GetDockerTagsForRepository(Constants.GitHubContainerRegistry);
 
         var dockerfile = $"{workDir}/Dockerfile";
-        var content = context.FileReadText(dockerfile);
+        var content = new StringBuilder(context.FileReadText(dockerfile));
+
+        content.AppendLine(EnvScript);
+
         if (variant == "sdk")
         {
-            content += "\nRUN dotnet tool install powershell --global";
+            content.AppendLine(InstallScript);
+            content.AppendLine("RUN dotnet tool install powershell --global");
             if (version == "3.1")
-            {
-                content += " --version 7.0.3";
-            }
-            content += "\nRUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh";
+                content.Append(" --version 7.0.3");
+
+            content.AppendLine("RUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh");
+        }
+        else
+        {
+            content.Append(InstallScript).AppendLine(" --runtime dotnet");
         }
 
-        context.FileWriteText($"{workDir}/Dockerfile.build", content);
+        context.FileWriteText($"{workDir}/Dockerfile.build", content.ToString());
 
         var buildSettings = new DockerImageBuildSettings
         {
             Rm = true,
             Tag = dockerhubTags.Union(githubTags).ToArray(),
             File = $"{workDir}/Dockerfile.build",
-            BuildArg = new[] { $"DOTNET_VERSION={version}", $"DOTNET_VARIANT={variant}" },
+            BuildArg = new[] { $"DOTNET_VERSION={version}" },
             Platform = "linux/amd64",
             Pull = true,
         };

@@ -7,9 +7,9 @@ using Cake.Frosting;
 public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 {
     public static readonly string[] VersionsToBuild = { "5.0", "3.1" };
-    public static readonly string[] VariantsToBuild = { "sdk", "runtime" };
+    private static readonly string[] VariantsToBuild = { "sdk", "runtime" };
 
-    public static readonly string[] DockerDistrosToBuild =
+    private static readonly string[] DockerDistrosToBuild =
     {
         "alpine.3.13-x64",
         "centos.7-x64",

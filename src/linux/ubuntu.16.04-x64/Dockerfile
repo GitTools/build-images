@@ -1,14 +1,9 @@
-ARG DOTNET_VERSION='3.1'
-ARG DOTNET_VARIANT='sdk'
-ARG TAG='16.04'
+ARG DOTNET_VERSION='5.0'
 
-FROM ubuntu:$TAG
+FROM ubuntu:16.04
 LABEL maintainers="GitTools Maintainers"
 
-ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
-ENV DOTNET_NOLOGO=true
 ARG DOTNET_VERSION
-ARG DOTNET_VARIANT
 
 RUN apt-get update \
     && apt-get install -y wget apt-transport-https \
@@ -16,7 +11,6 @@ RUN apt-get update \
     && dpkg -i packages-microsoft-prod.deb
 
 RUN apt-get update \
-    && apt-get install -y dotnet-$DOTNET_VARIANT-$DOTNET_VERSION \
     && apt-get install -y git \
     && rm -rf /var/lib/apt/lists/*
 
