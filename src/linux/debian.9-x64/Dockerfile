@@ -1,6 +1,8 @@
 FROM debian:9
 LABEL maintainers="GitTools Maintainers"
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update \
     && apt-get install -y wget gpg apt-transport-https \
     && wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg \
