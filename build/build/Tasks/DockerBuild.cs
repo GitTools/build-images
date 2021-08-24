@@ -34,25 +34,22 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh \
         var dockerfile = $"{workDir}/Dockerfile";
         var content = new StringBuilder(context.FileReadText(dockerfile));
 
-        content.AppendLine();
         content.Append(InstallScript);
         if (variant == "runtime")
         {
             content.Append(" --runtime dotnet");
         }
         content.AppendLine();
-        content.AppendLine();
 
         if (variant == "sdk")
         {
+            content.AppendLine();
             content.AppendLine("RUN dotnet tool install powershell --global");
             if (version == "3.1")
                 content.Append(" --version 7.0.3");
 
             content.AppendLine("RUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh");
-            content.AppendLine();
         }
-        content.AppendLine("WORKDIR /app");
 
         context.FileWriteText($"{workDir}/Dockerfile.build", content.ToString());
 
@@ -61,7 +58,7 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh \
             Rm = true,
             Tag = dockerhubTags.Union(githubTags).ToArray(),
             File = $"{workDir}/Dockerfile.build",
-            BuildArg = new[] { $"DOTNET_VERSION={version}", $"TAG={distro}", $"BASE_IMAGE={Constants.GitHubContainerRegistry}/{Constants.DockerImageDeps}" },
+            BuildArg = new[] { $"DOTNET_VERSION={version}", $"TAG={distro}" },
             Platform = "linux/amd64",
             Pull = true,
         };

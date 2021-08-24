@@ -1,8 +1,7 @@
 ARG DOTNET_VERSION='3.1'
-ARG BASE_IMAGE='gittools/deps'
 ARG TAG='alpine.3.13-x64'
 
-FROM $BASE_IMAGE:$TAG
+FROM gittools/deps:$TAG
 LABEL maintainers="GitTools Maintainers"
 
 ENV PATH=$PATH:/usr/local/bin:/root/.dotnet/tools \
@@ -11,3 +10,5 @@ ENV PATH=$PATH:/usr/local/bin:/root/.dotnet/tools \
     DOTNET_ROOT=/usr/local/bin
 
 ARG DOTNET_VERSION
+
+WORKDIR /app

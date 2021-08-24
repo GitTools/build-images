@@ -71,19 +71,6 @@ jobs:
       if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
       shell: pwsh
       run: dotnet run/build.dll --target=DockerPushDeps --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub --exclusive
-    -
-      name: Login to GitHub Container Registry
-      if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
-      uses: docker/login-action@v1
-      with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-    -
-      name: '[Push Docker images to Github Container registry]'
-      if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
-      shell: pwsh
-      run: dotnet run/build.dll --target=DockerPushDeps --dotnet_distro=${{ matrix.distro }} --docker_registry=github --exclusive
 
   build:
     name: Build

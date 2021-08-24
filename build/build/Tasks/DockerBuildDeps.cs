@@ -23,7 +23,6 @@ public sealed class DockerBuildDeps : FrostingTask<BuildContext>
         var dockerTags = new[]
         {
             $"{Constants.DockerHubRegistry}/{Constants.DockerImageDeps}:{distro}",
-            $"{Constants.GitHubContainerRegistry}/{Constants.DockerImageDeps}:{distro}",
         };
 
         var buildSettings = new DockerImageBuildSettings
