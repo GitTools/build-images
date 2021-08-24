@@ -57,7 +57,7 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh \
         }
 
         content.AppendLine("WORKDIR /app");
-        
+
         context.FileWriteText($"{workDir}/Dockerfile.build", content.ToString());
 
         var buildSettings = new DockerImageBuildSettings
