@@ -1,9 +1,5 @@
-ARG DOTNET_VERSION='5.0'
-
 FROM debian:9
 LABEL maintainers="GitTools Maintainers"
-
-ARG DOTNET_VERSION
 
 RUN apt-get update \
     && apt-get install -y wget gpg apt-transport-https \
@@ -15,5 +11,3 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y git \
     && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app

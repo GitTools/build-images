@@ -39,12 +39,12 @@ public static class Extensions
         var (distro, version, variant) = dockerImage;
 
         var tags = new List<string> {
-            $"{repositoryName}:{distro}-{variant}-{version}",
+            $"{repositoryName}/{Constants.DockerImageName}:{distro}-{variant}-{version}",
         };
 
         if (version == BuildLifetime.VersionsToBuild[0]) {
             tags.AddRange(new[] {
-                $"{repositoryName}:{distro}-{variant}-latest",
+                $"{repositoryName}/{Constants.DockerImageName}:{distro}-{variant}-latest",
             });
         }
 
