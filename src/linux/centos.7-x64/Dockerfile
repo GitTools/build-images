@@ -5,4 +5,6 @@ LABEL maintainers="GitTools Maintainers"
 RUN rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm \
     && yum update cache
 
-RUN yum install -y wget git && yum clean all && rm -rf /tmp/*
+RUN yum install -y wget git \
+    krb5-libs libicu openssl-libs zlib \
+    && yum clean all && rm -rf /tmp/*
