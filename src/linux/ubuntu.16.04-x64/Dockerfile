@@ -8,5 +8,5 @@ RUN apt-get update \
 
 RUN apt-get update \
     && apt-get install -y git \
-    libc6 libgcc1 libgssapi-krb5-2 libicu55 libssl1.0.0 libstdc++6 zlib1g -y \
+    libc6 libgcc1 libgssapi-krb5-2 libicu55 libssl1.0.0 libstdc++6 zlib1g \
     && rm -rf /var/lib/apt/lists/*
