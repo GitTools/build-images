@@ -44,9 +44,11 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh \
         if (variant == "sdk")
         {
             content.AppendLine();
-            content.AppendLine("RUN dotnet tool install powershell --global");
+            content.Append("RUN dotnet tool install powershell --global");
             if (version == "3.1")
-                content.Append(" --version 7.0.3");
+                content.AppendLine(" --version 7.0.3");
+            else
+                content.AppendLine();
 
             content.AppendLine("RUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh");
         }
