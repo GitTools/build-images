@@ -24,7 +24,7 @@ public static class DockerExtensions
                 str1 = path;
                 break;
         }
-        string[] additional = new string[1] { str1 };
+        string[] additional = new string[2] { str1, "-o type=image" };
         genericDockerRunner.Run("buildx build", settings, additional);
     }
 }
