@@ -24,7 +24,7 @@ public static class DockerExtensions
                 str1 = path;
                 break;
         }
-        string[] additional = { str1 };
+        string[] additional = { str1, "--push" };
         genericDockerRunner.Run("buildx build", settings, additional);
     }
 }
