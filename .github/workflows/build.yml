@@ -63,7 +63,7 @@ jobs:
     -
       name: '[Build Docker images]'
       shell: pwsh
-      run: dotnet run/build.dll --target=DockerBuildDeps --dotnet_distro=${{ matrix.distro }}
+      run: dotnet run/build.dll --target=DockerBuildDeps --dotnet_distro=${{ matrix.distro }} --verbosity=diagnostic
     -
       name: Login to DockerHub
       if: success() && github.event_name != 'pull_request'
