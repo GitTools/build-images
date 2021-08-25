@@ -12,7 +12,7 @@ public sealed class DockerBuild : FrostingTask<BuildContext>
 {
     private const string InstallScript = @"
 # install dotnet
-RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh \
+RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-check-certificate\
     && chmod +x $HOME/dotnet-install.sh \
     && $HOME/dotnet-install.sh --channel $DOTNET_VERSION --install-dir /usr/local/bin";
     public override void Run(BuildContext context)
