@@ -11,15 +11,15 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 
     private static readonly string[] DockerDistrosToBuild =
     {
-        "alpine.3.13-x64",
-        "centos.7-x64",
-        "centos.8-x64",
-        "debian.9-x64",
-        "debian.10-x64",
-        "fedora.33-x64",
-        "ubuntu.16.04-x64",
-        "ubuntu.18.04-x64",
-        "ubuntu.20.04-x64"
+        "alpine.3.13",
+        "centos.7",
+        "centos.8",
+        "debian.9",
+        "debian.10",
+        "fedora.33",
+        "ubuntu.16.04",
+        "ubuntu.18.04",
+        "ubuntu.20.04"
     };
 
     public override void Setup(BuildContext context)
