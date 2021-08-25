@@ -2,14 +2,14 @@ name: Build Deps
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-    - main
-    - 'feature/*'
+  # push:
+  #   branches:
+  #   - main
+  #   - 'feature/*'
 
-  pull_request:
-    branches:
-    - main
+  # pull_request:
+  #   branches:
+  #   - main
   schedule:
   - cron: "0 12 * * 1,4"
 
