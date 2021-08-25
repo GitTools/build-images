@@ -1,4 +1,5 @@
-﻿using Cake.Core;
+﻿using System.Linq;
+using Cake.Core;
 using Cake.Docker;
 
 public static class DockerExtensions
@@ -6,7 +7,7 @@ public static class DockerExtensions
     public static void DockerBuild(
         this ICakeContext context,
         DockerImageBuildSettings settings,
-        string path)
+        string path, params string[] args)
     {
         GenericDockerRunner<DockerImageBuildSettings> genericDockerRunner =
             new(context.FileSystem, context.Environment, context.ProcessRunner, context.Tools);
@@ -24,7 +25,7 @@ public static class DockerExtensions
                 str1 = path;
                 break;
         }
-        string[] additional = { str1, "--push" };
+        var additional = args.Concat(new[] { str1 }).ToArray();
         genericDockerRunner.Run("buildx build", settings, additional);
     }
 }

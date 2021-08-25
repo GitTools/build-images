@@ -34,6 +34,6 @@ public sealed class DockerBuildDeps : FrostingTask<BuildContext>
             Pull = true,
         };
 
-        context.DockerBuild(buildSettings, workDir.ToString());
+        context.DockerBuild(buildSettings, workDir.ToString(), "--push");
     }
 }
