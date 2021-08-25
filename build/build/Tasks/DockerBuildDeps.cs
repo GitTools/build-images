@@ -30,7 +30,7 @@ public sealed class DockerBuildDeps : FrostingTask<BuildContext>
             Rm = true,
             Tag = dockerTags.ToArray(),
             File = $"{workDir}/Dockerfile",
-            Platform = "linux/amd64",
+            Platform = "linux/amd64,linux/arm64",
             Pull = true,
         };
 
