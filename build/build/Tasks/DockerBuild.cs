@@ -45,10 +45,12 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-ch
         {
             content.AppendLine();
             content.Append("RUN dotnet tool install powershell --global");
-            if (version == "3.1")
-                content.AppendLine(" --version 7.0.3");
-            else
-                content.AppendLine();
+            content.AppendLine(version switch
+            {
+                "3.1" => " --version 7.0.7",
+                "5.0" => " --version 7.1.4",
+                _ => string.Empty
+            });
 
             content.AppendLine("RUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh");
         }
