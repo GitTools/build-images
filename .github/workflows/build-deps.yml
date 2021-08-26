@@ -70,4 +70,4 @@ jobs:
     -
       name: '[Build Docker images]'
       shell: pwsh
-      run: dotnet run/build.dll --target=DockerBuildDeps --dotnet_distro=${{ matrix.distro }} --verbosity=diagnostic
+      run: dotnet run/build.dll --target=DockerBuildDeps --dotnet_distro=${{ matrix.distro }}
