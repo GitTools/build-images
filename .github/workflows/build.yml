@@ -41,7 +41,7 @@ jobs:
       matrix:
         variant: [runtime, sdk]
         version: ['5.0', '3.1']
-        distro: [alpine.3.13, alpine.3.14, centos.7, centos.8, debian.9, debian.10, fedora.33, ubuntu.16.04, ubuntu.18.04, ubuntu.20.04]
+        distro: [alpine.3.13, alpine.3.14, centos.7, centos.8, debian.9, debian.10, debian.11, fedora.33, ubuntu.16.04, ubuntu.18.04, ubuntu.20.04]
         exclude:
         -   variant: sdk
             version: '3.1'
