@@ -29,7 +29,7 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-ch
         var workDir = DirectoryPath.FromString($"./src/linux");
 
         var dockerhubTags = dockerImage.GetDockerTagsForRepository(Constants.DockerHubRegistry);
-        var githubTags = dockerImage.GetDockerTagsForRepository(Constants.GitHubContainerRegistry);
+        // var githubTags = dockerImage.GetDockerTagsForRepository(Constants.GitHubContainerRegistry);
 
         var dockerfile = $"{workDir}/Dockerfile";
         var content = new StringBuilder(context.FileReadText(dockerfile));
@@ -60,13 +60,13 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-ch
         var buildSettings = new DockerImageBuildSettings
         {
             Rm = true,
-            Tag = dockerhubTags.Union(githubTags).ToArray(),
+            Tag = dockerhubTags/*.Union(githubTags)*/.ToArray(),
             File = $"{workDir}/Dockerfile.build",
             BuildArg = new[] { $"DOTNET_VERSION={version}", $"TAG={distro}" },
-            Platform = "linux/amd64",
+            Platform = "linux/amd64,linux/arm64",
             Pull = true,
         };
 
-        context.DockerBuild(buildSettings, workDir.ToString());
+        context.DockerBuild(buildSettings, workDir.ToString(), "--push");
     }
 }
