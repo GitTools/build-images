@@ -41,8 +41,18 @@ jobs:
       matrix:
         variant: [runtime, sdk]
         version: ['5.0', '3.1']
-        distro: [alpine.3.13, centos.7, centos.8, debian.9, debian.10, fedora.33, ubuntu.16.04, ubuntu.18.04, ubuntu.20.04]
+        distro: [alpine.3.13, alpine.3.14, centos.7, centos.8, debian.9, debian.10, fedora.33, ubuntu.16.04, ubuntu.18.04, ubuntu.20.04]
+        exclude:
+        -   variant: sdk
+            version: '3.1'
+            distro: alpine.3.13
+        -   variant: sdk
+            version: '3.1'
+            distro: alpine.3.14
+        -   variant: sdk
+            distro: centos.7
       fail-fast: false
+
     steps:
     -
       name: Checkout
@@ -73,21 +83,3 @@ jobs:
       name: '[Build Docker images]'
       shell: pwsh
       run: dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }}
-    # -
-    #   name: '[Push Docker images to DockerHub registry]'
-    #   if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
-    #   shell: pwsh
-    #   run: dotnet run/build.dll --target=DockerPush --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub --exclusive
-    # -
-    #   name: Login to GitHub Container Registry
-    #   if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
-    #   uses: docker/login-action@v1
-    #   with:
-    #       registry: ghcr.io
-    #       username: ${{ github.repository_owner }}
-    #       password: ${{ secrets.GITHUB_TOKEN }}
-    # -
-    #   name: '[Push Docker images to Github Container registry]'
-    #   if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
-    #   shell: pwsh
-    #   run: dotnet run/build.dll --target=DockerPush --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} --dotnet_distro=${{ matrix.distro }} --docker_registry=github --exclusive
