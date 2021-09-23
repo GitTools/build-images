@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Cake.Core;
@@ -41,21 +42,13 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-ch
         }
         content.AppendLine();
 
-        if (variant == "sdk")
-        {
-            content.AppendLine();
-            content.Append("RUN dotnet tool install powershell --global");
-            content.AppendLine(version switch
-            {
-                "3.1" => " --version 7.0.7",
-                "5.0" => " --version 7.1.4",
-                _ => string.Empty
-            });
-
-            content.AppendLine("RUN ln -sf /root/.dotnet/tools/pwsh /usr/bin/pwsh");
-        }
-
         context.FileWriteText($"{workDir}/Dockerfile.build", content.ToString());
+
+        var platforms = new List<string> { "linux/amd64" };
+        if (version != "3.1" || !distro.StartsWith("alpine"))
+        {
+            platforms.Add("linux/arm64");
+        }
 
         var buildSettings = new DockerImageBuildSettings
         {
@@ -63,7 +56,7 @@ RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-ch
             Tag = dockerhubTags/*.Union(githubTags)*/.ToArray(),
             File = $"{workDir}/Dockerfile.build",
             BuildArg = new[] { $"DOTNET_VERSION={version}", $"TAG={distro}" },
-            Platform = "linux/amd64,linux/arm64",
+            Platform = string.Join(",", platforms),
             Pull = true,
         };
 

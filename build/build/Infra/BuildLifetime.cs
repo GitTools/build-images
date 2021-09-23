@@ -11,6 +11,7 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 
     private static readonly string[] DockerDistrosToBuild =
     {
+        "alpine.3.12",
         "alpine.3.13",
         "alpine.3.14",
         "centos.7",
