@@ -20,7 +20,6 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
         "debian.10",
         "debian.11",
         "fedora.33",
-        "ubuntu.16.04",
         "ubuntu.18.04",
         "ubuntu.20.04"
     };
