@@ -35,21 +35,8 @@ public static class Extensions
         return attribute != null ? attribute.Name : task.Name;
     }
 
-    public static IEnumerable<string> GetDockerTagsForRepository(this DockerImage dockerImage, string repositoryName) {
-        var (distro, version, variant) = dockerImage;
+    public static string ToSuffix(this Architecture arch) => arch.ToString().ToLower();
 
-        var tags = new List<string> {
-            $"{repositoryName}/{Constants.DockerImageName}:{distro}-{variant}-{version}",
-        };
-
-        if (version == BuildLifetime.VersionsToBuild[0]) {
-            tags.AddRange(new[] {
-                $"{repositoryName}/{Constants.DockerImageName}:{distro}-{variant}-latest",
-            });
-        }
-
-        return tags.ToArray();
-    }
     public static DirectoryPath Combine(this string path, string segment) => DirectoryPath.FromString(path).Combine(segment);
     public static FilePath CombineWithFilePath(this string path, string segment) => DirectoryPath.FromString(path).CombineWithFilePath(segment);
 }

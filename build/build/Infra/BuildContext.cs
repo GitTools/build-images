@@ -2,12 +2,20 @@ using System.Collections.Generic;
 using Cake.Core;
 using Cake.Frosting;
 
-public record DockerImage(string Distro, string Version, string Variant);
+public enum Architecture
+{
+    Arm64,
+    Amd64
+}
+
+public record DockerDepsImage(string Distro, Architecture Architecture);
+public record DockerImage(string Distro, string Version, string Variant, Architecture Architecture) : DockerDepsImage(Distro, Architecture);
 
 public class BuildContext : FrostingContext
 {
+    public IEnumerable<DockerDepsImage> DepsImages { get; set; } = new List<DockerDepsImage>();
     public IEnumerable<DockerImage> Images { get; set; } = new List<DockerImage>();
-    public string DockerRepository { get; set; } = Constants.DockerHubRegistry;
+    public string DockerRegistry { get; set; } = Constants.DockerHubRegistry;
     public BuildContext(ICakeContext context)
         : base(context)
     {

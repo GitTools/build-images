@@ -1,39 +1,51 @@
+using System.Collections.Generic;
 using System.Linq;
-using Cake.Core;
 using Cake.Core.IO;
 using Cake.Docker;
 using Cake.Frosting;
 
 [TaskName(nameof(DockerBuildDeps))]
 [TaskDescription("Builds the docker images dependencies")]
-public sealed class DockerBuildDeps : FrostingTask<BuildContext>
+public sealed class DockerBuildDeps : DockerBaseTask
 {
     public override void Run(BuildContext context)
     {
-        foreach (var dockerImage in context.Images.GroupBy(x => x.Distro))
+        // build/push images
+        foreach (var dockerImage in context.DepsImages)
         {
-            BuildDockerImage(context, dockerImage.Key);
+            DockerImage(context, dockerImage);
+        }
+
+        // build/push manifests
+        foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
+        {
+            var dockerImage = group.First();
+            DockerManifest(context, dockerImage);
         }
     }
 
-    private static void BuildDockerImage(ICakeContext context, string distro)
+    protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) => DirectoryPath.FromString($"./src/linux/{dockerImage.Distro}");
+
+    protected override DockerImageBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
     {
-        var workDir = DirectoryPath.FromString($"./src/linux/{distro}");
+        var buildSettings = base.GetBuildSettings(dockerImage, registry);
 
-        var dockerTags = new[]
+        var workDir = GetWorkingDir(dockerImage);
+        buildSettings.File = $"{workDir}/Dockerfile";
+
+        return buildSettings;
+    }
+
+    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry, Architecture? arch = null)
+    {
+        var tags = new[]
         {
-            $"{Constants.DockerHubRegistry}/{Constants.DockerImageDeps}:{distro}",
+            $"{dockerRegistry}/{Constants.DockerImageDeps}:{dockerImage.Distro}",
         };
 
-        var buildSettings = new DockerImageBuildSettings
-        {
-            Rm = true,
-            Tag = dockerTags.ToArray(),
-            File = $"{workDir}/Dockerfile",
-            Platform = "linux/amd64,linux/arm64",
-            Pull = true,
-        };
+        if (!arch.HasValue) return tags;
 
-        context.DockerBuild(buildSettings, workDir.ToString(), "--push");
+        var suffix = arch.Value.ToSuffix();
+        return tags.Select(x => $"{x}-{suffix}");
     }
 }

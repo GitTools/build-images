@@ -17,7 +17,7 @@ public static class DockerExtensions
         {
             case false:
                 {
-                    string str2 = path.Trim();
+                    var str2 = path.Trim();
                     str1 = str2.Length <= 1 || !str2.StartsWith("\"") || !str2.EndsWith("\"") ? "\"" + path + "\"" : path;
                     break;
                 }
@@ -25,7 +25,11 @@ public static class DockerExtensions
                 str1 = path;
                 break;
         }
-        var additional = args.Concat(new[] { str1 }).ToArray();
+        var additional = args.Concat(new[] {
+            str1
+        }).ToArray();
         genericDockerRunner.Run("buildx build", settings, additional);
     }
+
+    public static void DockerManifestRemove(this ICakeContext context, string tag) => context.DockerCustomCommand($"manifest rm {tag}");
 }
