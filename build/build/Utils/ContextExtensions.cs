@@ -1,4 +1,5 @@
-﻿using Cake.Common.Build;
+﻿using System.Linq;
+using Cake.Common.Build;
 using Cake.Common.Diagnostics;
 using Cake.Core;
 
@@ -32,4 +33,16 @@ public static class ContextExtensions
         }
         context.Information($"{endgroup}");
     }
+
+    public static bool SkipArm64Image(this ICakeContext context, DockerImage dockerImage)
+    {
+        var (distro, arch) = dockerImage;
+        if (arch != Architecture.Arm64 ) return false;
+        if (!Constants.DistrosToSkip.Contains(distro)) return false;
+        if (dockerImage.Version != "3.1") return false;
+
+        context.Information($"Skipping Distro: {distro}, Arch: {arch}");
+        return true;
+    }
+
 }

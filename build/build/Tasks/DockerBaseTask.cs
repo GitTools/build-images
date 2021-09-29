@@ -19,14 +19,21 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
         }
     }
 
-    protected void DockerManifest(BuildContext context, DockerDepsImage dockerImage)
+    protected void DockerManifest(BuildContext context, DockerDepsImage dockerImage, bool skipArm64Image = false)
     {
         var manifestTags = GetDockerTags(dockerImage, context.DockerRegistry);
         foreach (var tag in manifestTags)
         {
             var amd64Tag = $"{tag}-{Architecture.Amd64.ToSuffix()}";
-            var arm64Tag = $"{tag}-{Architecture.Arm64.ToSuffix()}";
-            context.DockerManifestCreate(tag, amd64Tag, arm64Tag);
+            if (skipArm64Image)
+            {
+                context.DockerManifestCreate(tag, amd64Tag);
+            }
+            else
+            {
+                var arm64Tag = $"{tag}-{Architecture.Arm64.ToSuffix()}";
+                context.DockerManifestCreate(tag, amd64Tag, arm64Tag);
+            }
             context.DockerManifestPush(tag);
             context.DockerManifestRemove(tag);
         }

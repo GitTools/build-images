@@ -16,14 +16,16 @@ public sealed class DockerBuild : DockerBaseTask
         // build/push images
         foreach (var dockerImage in context.Images)
         {
+            if (context.SkipArm64Image(dockerImage)) continue;
             DockerImage(context, dockerImage);
         }
 
         // build/push manifests
         foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version}))
         {
-            var dockerImage = group.First();
-            DockerManifest(context, dockerImage);
+            var amd64DockerImage = group.First(x => x.Architecture == Architecture.Amd64);
+            var arm64DockerImage = group.First(x => x.Architecture == Architecture.Arm64);
+            DockerManifest(context, amd64DockerImage, context.SkipArm64Image(arm64DockerImage));
         }
     }
 
@@ -56,7 +58,7 @@ public sealed class DockerBuild : DockerBaseTask
             $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}",
         };
 
-        if (version == BuildLifetime.VersionsToBuild[0]) {
+        if (version == Constants.VersionsToBuild[0]) {
             tags.AddRange(new[] {
                 $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest",
             });
