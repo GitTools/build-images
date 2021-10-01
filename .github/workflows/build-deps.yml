@@ -29,6 +29,12 @@ jobs:
         path: run
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
+      name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1.8.2
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+    -
       name: '[Prepare]'
       if: steps.cache-cake.outputs.cache-hit != 'true'
       run: dotnet build build/CI.sln --configuration=Release
@@ -53,7 +59,7 @@ jobs:
         path: run
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
-      name: Set up QEMU
+      name: Setup QEMU
       uses: docker/setup-qemu-action@v1
     -
       name: Set up Docker Buildx
@@ -67,6 +73,12 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+    -
+      name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1.8.2
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
     -
       name: '[Build Docker images]'
       shell: pwsh

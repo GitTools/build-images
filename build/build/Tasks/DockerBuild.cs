@@ -49,7 +49,7 @@ public sealed class DockerBuild : DockerBaseTask
             $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}",
         };
 
-        if (version == Constants.VersionsToBuild[0]) {
+        if (version == Constants.VersionForDockerLatest) {
             tags.AddRange(new[] {
                 $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest",
             });
