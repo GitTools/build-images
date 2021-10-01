@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Cake.Core.IO;
-using Cake.Frosting;
-
 public static class Extensions
 {
     public static IEnumerable<Type> FindAllDerivedTypes(this Assembly assembly, Type baseType) =>

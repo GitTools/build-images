@@ -1,9 +1,4 @@
-﻿using System.Linq;
-using Cake.Common.Build;
-using Cake.Common.Diagnostics;
-using Cake.Core;
-
-public static class ContextExtensions
+﻿public static class ContextExtensions
 {
     public static void StartGroup(this ICakeContext context, string title)
     {

@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using Cake.Core;
-using Cake.Frosting;
-
 public enum Architecture
 {
     Arm64,

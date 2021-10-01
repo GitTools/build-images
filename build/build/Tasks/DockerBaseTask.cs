@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Cake.Core.IO;
-using Cake.Docker;
-using Cake.Frosting;
-
-public abstract class DockerBaseTask : FrostingTask<BuildContext>
+﻿public abstract class DockerBaseTask : FrostingTask<BuildContext>
 {
     protected virtual void DockerImage(BuildContext context, DockerDepsImage dockerImage)
     {

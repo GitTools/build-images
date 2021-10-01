@@ -1,4 +1,3 @@
-using Cake.Frosting;
 using Microsoft.Extensions.DependencyInjection;
 
 public class Startup : IFrostingStartup

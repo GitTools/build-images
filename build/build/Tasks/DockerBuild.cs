@@ -1,12 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Cake.Core;
-using Cake.Core.IO;
-using Cake.Docker;
-using Cake.FileHelpers;
-using Cake.Frosting;
-
 [TaskName(nameof(DockerBuild))]
 [TaskDescription("Builds the docker images")]
 public sealed class DockerBuild : DockerBaseTask

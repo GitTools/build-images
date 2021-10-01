@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using Cake.Core;
-using Cake.Docker;
-
-public static class DockerExtensions
+﻿public static class DockerExtensions
 {
     public static void DockerBuild(
         this ICakeContext context,

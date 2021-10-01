@@ -1,7 +1,4 @@
-﻿using Cake.Core;
-using Cake.Frosting;
-
-public class BuildTaskLifetime : FrostingTaskLifetime
+﻿public class BuildTaskLifetime : FrostingTaskLifetime
 {
     public override void Setup(ICakeContext context, ITaskSetupContext info)
     {

@@ -1,9 +1,3 @@
-using System.Linq;
-using Cake.Common;
-using Cake.Common.Diagnostics;
-using Cake.Core;
-using Cake.Frosting;
-
 public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 {
     public override void Setup(BuildContext context)
