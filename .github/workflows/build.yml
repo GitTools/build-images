@@ -33,7 +33,6 @@ jobs:
       uses: actions/setup-dotnet@v1.8.2
       with:
         dotnet-version: '6.0.x'
-        include-prerelease: true
     -
       name: '[Prepare]'
       if: steps.cache-cake.outputs.cache-hit != 'true'
@@ -74,7 +73,6 @@ jobs:
       uses: actions/setup-dotnet@v1.8.2
       with:
         dotnet-version: '6.0.x'
-        include-prerelease: true
     -
       name: Login to DockerHub
       if: success() && github.event_name != 'pull_request'
