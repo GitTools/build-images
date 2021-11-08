@@ -4,7 +4,7 @@
     {
         var buildSystem = context.BuildSystem();
         var startGroup = "[group]";
-        if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
+        if (buildSystem.IsRunningOnAzurePipelines)
         {
             startGroup = "##[group]";
         }
@@ -18,7 +18,7 @@
     {
         var buildSystem = context.BuildSystem();
         var endgroup = "[endgroup]";
-        if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
+        if (buildSystem.IsRunningOnAzurePipelines)
         {
             endgroup = "##[endgroup]";
         }
