@@ -3,8 +3,8 @@
         <AssemblyName>build</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Cake.Docker" Version="1.0.0" />
-        <PackageReference Include="Cake.FileHelpers" Version="4.0.1" />
-        <PackageReference Include="Cake.Frosting" Version="2.0.0" />
+        <PackageReference Include="Cake.Docker" Version="1.1.1" />
+        <PackageReference Include="Cake.FileHelpers" Version="5.0.0" />
+        <PackageReference Include="Cake.Frosting" Version="2.1.0" />
     </ItemGroup>
 </Project>
