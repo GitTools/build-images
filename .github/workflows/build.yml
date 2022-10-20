@@ -30,7 +30,7 @@ jobs:
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
       name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3.0.2
+      uses: actions/setup-dotnet@v3.0.2
       with:
         dotnet-version: '7.0.x'
         dotnet-quality: 'preview'
@@ -46,8 +46,12 @@ jobs:
     strategy:
       matrix:
         variant: [runtime, sdk]
-        version: ['6.0', '5.0', '3.1']
-        distro: [ alpine.3.12, alpine.3.13, alpine.3.14, centos.7, centos.8, debian.9, debian.10, debian.11, fedora.33, ubuntu.18.04, ubuntu.20.04, ubuntu.22.04 ]
+        version: ['7.0', '6.0', '5.0', '3.1']
+        distro: [ alpine.3.12, alpine.3.13, alpine.3.14, alpine.3.15, centos.7, centos.8, debian.9, debian.10, debian.11, fedora.33, ubuntu.18.04, ubuntu.20.04, ubuntu.22.04 ]
+        exclude:
+        -
+          version: '3.1'
+          distro: alpine.3.15
       fail-fast: false
 
     steps:
@@ -71,13 +75,13 @@ jobs:
         install: true
     -
       name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3.0.2
+      uses: actions/setup-dotnet@v3.0.2
       with:
         dotnet-version: '7.0.x'
         dotnet-quality: 'preview'
     -
       name: Login to DockerHub
-      if: success() && github.event_name != 'pull_request'
+      if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -89,7 +93,7 @@ jobs:
 
     -
       name: Login to GitHub Container Registry
-      if: success() && github.event_name != 'pull_request'
+      if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
       uses: docker/login-action@v2
       with:
           registry: ghcr.io

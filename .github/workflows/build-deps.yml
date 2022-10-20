@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [ alpine.3.12, alpine.3.13, alpine.3.14, centos.7, centos.8, debian.9, debian.10, debian.11, fedora.33, ubuntu.18.04, ubuntu.20.04, ubuntu.22.04 ]
+        distro: [ alpine.3.12, alpine.3.13, alpine.3.14, alpine.3.15, centos.7, centos.8, debian.9, debian.10, debian.11, fedora.33, ubuntu.18.04, ubuntu.20.04, ubuntu.22.04 ]
       fail-fast: false
     steps:
     -
@@ -68,7 +68,7 @@ jobs:
         install: true
     -
       name: Login to DockerHub
-      if: success() && github.event_name != 'pull_request'
+      if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
@@ -86,7 +86,7 @@ jobs:
 
     -
       name: Login to GitHub Container Registry
-      if: success() && github.event_name != 'pull_request'
+      if: success() && github.event_name != 'pull_request' && github.repository_owner == 'GitTools'
       uses: docker/login-action@v2
       with:
           registry: ghcr.io
