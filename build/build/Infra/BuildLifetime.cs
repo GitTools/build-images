@@ -1,6 +1,6 @@
 public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 {
-    public override void Setup(BuildContext context)
+    public override void Setup(BuildContext context, ISetupContext info)
     {
         var architecture = context.HasArgument("arch") ? context.Argument<Architecture>("arch") : (Architecture?)null;
 
