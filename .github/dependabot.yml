@@ -5,7 +5,7 @@ updates:
     - "dependencies"
   commit-message:
     prefix: "(deps)"
-  directory: "/"
+  directory: "/build"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
