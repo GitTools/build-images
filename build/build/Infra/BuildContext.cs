@@ -9,6 +9,7 @@ public record DockerImage(string Distro, string Version, string Variant, Archite
 
 public class BuildContext : FrostingContext
 {
+    public bool PushImages { get; set; }
     public IEnumerable<DockerDepsImage> DepsImages { get; set; } = new List<DockerDepsImage>();
     public IEnumerable<DockerImage> Images { get; set; } = new List<DockerImage>();
     public string DockerRegistry { get; set; } = Constants.DockerHubRegistry;

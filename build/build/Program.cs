@@ -1,5 +1,6 @@
 return new CakeHost()
     .UseContext<BuildContext>()
-    .UseStartup<Startup>()
+    .UseLifetime<BuildLifetime>()
+    .UseTaskLifetime<BuildTaskLifetime>()
     .SetToolPath(Constants.ToolsDirectory)
     .Run(args);

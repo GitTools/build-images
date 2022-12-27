@@ -7,6 +7,10 @@
         context.DockerBuild(buildSettings, GetWorkingDir(dockerImage).ToString(), "--output type=docker");
 
         var dockerTags = GetDockerTags(dockerImage, context.DockerRegistry, dockerImage.Architecture).ToArray();
+
+        if (!context.PushImages)
+            return;
+
         foreach (var tag in dockerTags)
         {
             context.DockerPush(tag);
@@ -28,7 +32,11 @@
                 var arm64Tag = $"{tag}-{Architecture.Arm64.ToSuffix()}";
                 context.DockerManifestCreate(tag, amd64Tag, arm64Tag);
             }
-            context.DockerManifestPush(tag);
+
+            if (context.PushImages)
+            {
+                context.DockerManifestPush(tag);
+            }
             context.DockerManifestRemove(tag);
         }
     }

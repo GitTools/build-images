@@ -8,14 +8,16 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
         var dotnetVersion = context.Argument("dotnet_version", "").ToLower();
         var dotnetVariant = context.Argument("dotnet_variant", "").ToLower();
         var dockerDistro = context.Argument("dotnet_distro", "").ToLower();
+        var pushImages = context.Argument("push_images", false);
 
-        context.Information($"Building for Version: {dotnetVersion}, Variant: {dotnetVariant}, Distro: {dockerDistro}");
+        context.Information($"Building for Version: {dotnetVersion}, Variant: {dotnetVariant}, Distro: {dockerDistro}, Push: {pushImages}");
 
         var versions = string.IsNullOrWhiteSpace(dotnetVersion) ? Constants.VersionsToBuild : new[] { dotnetVersion };
         var variants = string.IsNullOrWhiteSpace(dotnetVariant) ? Constants.VariantsToBuild : new[] { dotnetVariant };
         var distros = string.IsNullOrWhiteSpace(dockerDistro) ? Constants.DockerDistrosToBuild : new[] { dockerDistro };
         var archs = architecture.HasValue ? new[] { architecture.Value } : Constants.ArchToBuild;
 
+        context.PushImages = pushImages;
         context.DepsImages = from distro in distros
                              from arch in archs
                              select new DockerDepsImage(distro, arch);

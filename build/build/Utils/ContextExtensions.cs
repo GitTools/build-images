@@ -34,7 +34,6 @@
         var (distro, arch) = dockerImage;
         if (arch != Architecture.Arm64 ) return false;
         if (!Constants.DistrosToSkip.Contains(distro)) return false;
-        if (dockerImage.Version != "3.1") return false;
 
         context.Information($"Skipping Distro: {distro}, Arch: {arch}");
         return true;
