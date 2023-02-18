@@ -2,14 +2,14 @@ name: Build Deps
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #   - main
-  #   - 'feature/*'
+  push:
+    branches:
+    - main
+    - 'feature/*'
 
-  # pull_request:
-  #   branches:
-  #   - main
+  pull_request:
+    branches:
+    - main
   schedule:
   - cron: "0 11 * * 1,4"
 
@@ -39,14 +39,14 @@ jobs:
       run: dotnet build build/CI.sln --configuration=Release
 
   build_deps:
-    name: Build and publish Deps docker images
+    name: Deps
     needs: [prepare]
     env:
         PUSH_IMAGES: ${{github.event_name != 'pull_request' && github.repository_owner == 'GitTools'}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [alpine.3.13, alpine.3.14, alpine.3.15, centos.7, centos.8, debian.10, debian.11, fedora.33, ubuntu.18.04, ubuntu.20.04, ubuntu.22.04]
+        distro: [alpine.3.15, alpine.3.16, alpine.3.17, centos.7, centos.8, debian.10, debian.11, fedora.36, ubuntu.18.04, ubuntu.20.04, ubuntu.22.04]
       fail-fast: false
     steps:
     -

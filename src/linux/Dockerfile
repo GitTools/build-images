@@ -1,5 +1,5 @@
-ARG DOTNET_VERSION='3.1'
-ARG TAG='alpine.3.13-x64'
+ARG DOTNET_VERSION='6.0'
+ARG TAG='alpine.3.15-x64'
 
 FROM gittools/deps:$TAG
 LABEL maintainers="GitTools Maintainers"
