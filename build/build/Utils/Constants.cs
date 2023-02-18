@@ -16,7 +16,7 @@ public class Constants
         "alpine.3.16",
         "alpine.3.17",
         "centos.7",
-        "centos.8",
+        "centos.stream.8",
         "debian.10",
         "debian.11",
         "fedora.36",
