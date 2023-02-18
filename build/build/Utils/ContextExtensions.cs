@@ -28,15 +28,4 @@
         }
         context.Information($"{endgroup}");
     }
-
-    public static bool SkipArm64Image(this ICakeContext context, DockerImage dockerImage)
-    {
-        var (distro, arch) = dockerImage;
-        if (arch != Architecture.Arm64 ) return false;
-        if (!Constants.DistrosToSkip.Contains(distro)) return false;
-
-        context.Information($"Skipping Distro: {distro}, Arch: {arch}");
-        return true;
-    }
-
 }
