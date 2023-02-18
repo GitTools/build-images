@@ -6,5 +6,5 @@ RUN rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-pro
     && yum update cache
 
 RUN yum install -y wget git \
-    krb5-libs libicu libstdc++6 openssl-libs zlib \
+    krb5-libs libicu libstdc++6.0.2 openssl-libs zlib \
     && yum clean all && rm -rf /tmp/*
