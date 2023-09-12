@@ -10,6 +10,9 @@ public sealed class DockerBuildDeps : DockerBaseTask
             DockerImage(context, dockerImage);
         }
 
+        if (!context.PushImages)
+            return;
+        
         // build/push manifests
         foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
         {
