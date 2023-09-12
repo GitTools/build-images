@@ -64,7 +64,7 @@ jobs:
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
       name: Setup QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@v3
     -
       name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v2
