@@ -1,4 +1,4 @@
-public class Constants
+public static class Constants
 {
     public const string ToolsDirectory = "./tools";
     public const string DockerHubRegistry = "docker.io";
