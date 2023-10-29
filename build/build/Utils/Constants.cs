@@ -19,7 +19,7 @@ public class Constants
         "centos.stream.8",
         "debian.10",
         "debian.11",
-        "fedora.36",
+        "fedora.37",
         "ubuntu.18.04",
         "ubuntu.20.04",
         "ubuntu.22.04"
