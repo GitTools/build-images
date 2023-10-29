@@ -14,11 +14,10 @@ public sealed class DockerBuild : DockerBaseTask
             return;
 
         // build/push manifests
-        foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version}))
+        foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version }))
         {
-            var amd64DockerImage = group.First(x => x.Architecture == Architecture.Amd64);
-            var arm64DockerImage = group.First(x => x.Architecture == Architecture.Arm64);
-            DockerManifest(context, amd64DockerImage);
+            var dockerImage = group.First();
+            DockerManifest(context, dockerImage);
         }
     }
 

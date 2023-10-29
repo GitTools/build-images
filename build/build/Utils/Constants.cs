@@ -6,10 +6,10 @@ public class Constants
     public const string DockerImageName = "gittools/build-images";
     public const string DockerImageDeps = "gittools/deps";
 
+    public static readonly Architecture[] ArchToBuild = { Architecture.Amd64, Architecture.Arm64 };
     public static readonly string VersionForDockerLatest = "6.0";
     public static readonly string[] VersionsToBuild = { "7.0", "6.0" };
     public static readonly string[] VariantsToBuild = { "sdk", "runtime" };
-    public static readonly Architecture[] ArchToBuild = { Architecture.Amd64, Architecture.Arm64 };
     public static readonly string[] DockerDistrosToBuild =
     {
         "alpine.3.15",
