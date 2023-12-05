@@ -24,7 +24,7 @@ jobs:
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
       name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
@@ -67,7 +67,7 @@ jobs:
         install: true
     -
       name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
