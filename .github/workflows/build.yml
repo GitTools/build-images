@@ -70,7 +70,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
-
     -
       name: Login to DockerHub
       if: success() && env.PUSH_IMAGES == 'true'
@@ -85,7 +84,6 @@ jobs:
         dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
                              --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub `
                              --push_images=${{env.PUSH_IMAGES}}
-
     -
       name: Login to GitHub Container Registry
       if: success() && env.PUSH_IMAGES == 'true'

@@ -11,4 +11,6 @@ ENV PATH=$PATH:/usr/local/bin:/root/.dotnet/tools \
 
 ARG DOTNET_VERSION
 
+RUN git config --global --add safe.directory '*'
+
 WORKDIR /app
