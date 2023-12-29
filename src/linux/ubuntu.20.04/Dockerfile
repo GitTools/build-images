@@ -1,5 +1,4 @@
 FROM ubuntu:20.04
-LABEL maintainers="GitTools Maintainers"
 
 ENV DEBIAN_FRONTEND=noninteractive
 

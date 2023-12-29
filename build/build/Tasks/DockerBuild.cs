@@ -23,11 +23,12 @@ public sealed class DockerBuild : DockerBaseTask
 
     protected override void DockerImage(BuildContext context, DockerDepsImage dockerImage)
     {
-        GenerateDockerfile(context, GetWorkingDir(dockerImage), (dockerImage as DockerImage)!.Variant);
+        GenerateDockerfile(context, GetWorkingDir(dockerImage), dockerImage);
         base.DockerImage(context, dockerImage);
     }
 
-    protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) => DirectoryPath.FromString("./src/linux");
+    protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) =>
+        DirectoryPath.FromString("./src/linux");
 
     protected override DockerImageBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
     {
@@ -36,22 +37,36 @@ public sealed class DockerBuild : DockerBaseTask
         var workDir = GetWorkingDir(dockerImage);
 
         var image = dockerImage as DockerImage;
+        var (distro, version, variant, arch) = (DockerImage)dockerImage;
         buildSettings.File = $"{workDir}/Dockerfile.build";
-        buildSettings.BuildArg = new[] { $"DOTNET_VERSION={image!.Version}", $"TAG={image.Distro}" };
+        buildSettings.BuildArg = [$"DOTNET_VERSION={image!.Version}", $"TAG={image.Distro}"];
 
+        var suffix = $"({distro}-{variant}-{version}-{arch.ToSuffix()})";
+        buildSettings.Label =
+        [
+            "maintainers=GitTools Maintainers",
+            $"org.opencontainers.image.description=GitTools build images {suffix})",
+            "org.opencontainers.image.authors=GitTools Maintainers",
+            "org.opencontainers.image.licenses=MIT",
+            "org.opencontainers.image.source=https://github.com/GitTools/build-images.git"
+        ];
         return buildSettings;
     }
 
-    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry, Architecture? arch = null)
+    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
+        Architecture? arch = null)
     {
         var (distro, version, variant, _) = (dockerImage as DockerImage)!;
 
-        var tags = new List<string> {
+        var tags = new List<string>
+        {
             $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}",
         };
 
-        if (version == Constants.VersionForDockerLatest) {
-            tags.AddRange(new[] {
+        if (version == Constants.VersionForDockerLatest)
+        {
+            tags.AddRange(new[]
+            {
                 $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest",
             });
         }
@@ -61,22 +76,30 @@ public sealed class DockerBuild : DockerBaseTask
         var suffix = arch.Value.ToSuffix();
         return tags.Select(x => $"{x}-{suffix}");
     }
-    private static void GenerateDockerfile(ICakeContext context, DirectoryPath? workDir, string? variant)
+
+    private static void GenerateDockerfile(ICakeContext context, DirectoryPath? workDir, DockerDepsImage dockerImage)
     {
-        const string installScript = @"
-# install dotnet
-RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-check-certificate\
-    && chmod +x $HOME/dotnet-install.sh \
-    && $HOME/dotnet-install.sh --channel $DOTNET_VERSION --install-dir /usr/local/bin";
+        var variant = ((DockerImage)dockerImage).Variant;
+
+        const string installScript =
+            """
+            # install dotnet
+            RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-check-certificate\
+            && chmod +x $HOME/dotnet-install.sh \
+            && $HOME/dotnet-install.sh --channel $DOTNET_VERSION --install-dir /usr/local/bin
+            """;
 
         var dockerfile = $"{workDir}/Dockerfile";
         var content = new StringBuilder(context.FileReadText(dockerfile));
+
+        content.AppendLine();
 
         content.Append(installScript);
         if (variant == "runtime")
         {
             content.Append(" --runtime dotnet");
         }
+
         content.AppendLine();
 
         var filePath = $"{workDir}/Dockerfile.build";

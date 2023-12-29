@@ -12,7 +12,7 @@ public sealed class DockerBuildDeps : DockerBaseTask
 
         if (!context.PushImages)
             return;
-        
+
         // build/push manifests
         foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
         {
@@ -21,19 +21,30 @@ public sealed class DockerBuildDeps : DockerBaseTask
         }
     }
 
-    protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) => DirectoryPath.FromString($"./src/linux/{dockerImage.Distro}");
+    protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) =>
+        DirectoryPath.FromString($"./src/linux/{dockerImage.Distro}");
 
     protected override DockerImageBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
     {
         var buildSettings = base.GetBuildSettings(dockerImage, registry);
+        var (distro, arch) = dockerImage;
 
         var workDir = GetWorkingDir(dockerImage);
         buildSettings.File = $"{workDir}/Dockerfile";
+        buildSettings.Label =
+        [
+            "maintainers=GitTools Maintainers",
+            $"org.opencontainers.image.description=GitTools deps images ({distro}-{arch.ToSuffix()})",
+            "org.opencontainers.image.authors=GitTools Maintainers",
+            "org.opencontainers.image.licenses=MIT",
+            "org.opencontainers.image.source=https://github.com/GitTools/build-images.git"
+        ];
 
         return buildSettings;
     }
 
-    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry, Architecture? arch = null)
+    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
+        Architecture? arch = null)
     {
         var tags = new[]
         {

@@ -1,5 +1,4 @@
 FROM fedora:37
-LABEL maintainers="GitTools Maintainers"
 
 RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
     && dnf install -y wget git findutils \

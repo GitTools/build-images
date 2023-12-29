@@ -1,5 +1,4 @@
 FROM alpine:3.18
-LABEL maintainers="GitTools Maintainers"
 
 USER root
 # Pre-requisits

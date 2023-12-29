@@ -7,14 +7,10 @@ public enum Architecture
 public record DockerDepsImage(string Distro, Architecture Architecture);
 public record DockerImage(string Distro, string Version, string Variant, Architecture Architecture) : DockerDepsImage(Distro, Architecture);
 
-public class BuildContext : FrostingContext
+public class BuildContext(ICakeContext context) : FrostingContext(context)
 {
     public bool PushImages { get; set; }
     public IEnumerable<DockerDepsImage> DepsImages { get; set; } = new List<DockerDepsImage>();
     public IEnumerable<DockerImage> Images { get; set; } = new List<DockerImage>();
     public string DockerRegistry { get; set; } = Constants.DockerHubRegistry;
-    public BuildContext(ICakeContext context)
-        : base(context)
-    {
-    }
 }

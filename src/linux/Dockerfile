@@ -1,8 +1,7 @@
 ARG DOTNET_VERSION='6.0'
-ARG TAG='alpine.3.17-x64'
+ARG TAG='alpine.3.17'
 
 FROM gittools/deps:$TAG
-LABEL maintainers="GitTools Maintainers"
 
 ENV PATH=$PATH:/usr/local/bin:/root/.dotnet/tools \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \

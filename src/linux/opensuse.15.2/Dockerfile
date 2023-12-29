@@ -1,5 +1,4 @@
 FROM opensuse/leap:15.2
-LABEL maintainers="GitTools Maintainers"
 
 RUN zypper install -y libicu-devel git-core \
     && rpm --import https://packages.microsoft.com/keys/microsoft.asc \

@@ -1,5 +1,4 @@
 FROM debian:11
-LABEL maintainers="GitTools Maintainers"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
