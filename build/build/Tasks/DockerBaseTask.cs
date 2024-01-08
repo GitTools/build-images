@@ -1,4 +1,6 @@
-﻿public abstract class DockerBaseTask : FrostingTask<BuildContext>
+namespace Build;
+
+public abstract class DockerBaseTask : FrostingTask<BuildContext>
 {
     protected virtual void DockerImage(BuildContext context, DockerDepsImage dockerImage)
     {

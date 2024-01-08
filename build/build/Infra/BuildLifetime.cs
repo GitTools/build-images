@@ -1,3 +1,5 @@
+namespace Build;
+
 public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 {
     public override void Setup(BuildContext context, ISetupContext info)

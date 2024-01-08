@@ -1,3 +1,5 @@
+namespace Build;
+
 public static class Extensions
 {
     public static IEnumerable<Type> FindAllDerivedTypes(this Assembly assembly, Type baseType) =>

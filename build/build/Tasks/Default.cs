@@ -1,3 +1,5 @@
+namespace Build;
+
 [TaskName(nameof(Default))]
 [TaskDescription("Shows this output")]
 public class Default : FrostingTask

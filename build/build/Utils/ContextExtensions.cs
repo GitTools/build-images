@@ -1,4 +1,6 @@
-﻿public static class ContextExtensions
+﻿namespace Build;
+
+public static class ContextExtensions
 {
     public static void StartGroup(this ICakeContext context, string title)
     {

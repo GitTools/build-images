@@ -1,3 +1,5 @@
+namespace Build;
+
 [TaskName(nameof(DockerBuild))]
 [TaskDescription("Builds the docker images")]
 public sealed class DockerBuild : DockerBaseTask

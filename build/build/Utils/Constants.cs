@@ -1,3 +1,5 @@
+namespace Build;
+
 public static class Constants
 {
     public const string ToolsDirectory = "./tools";

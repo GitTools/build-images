@@ -1,4 +1,6 @@
-﻿public static class DockerExtensions
+namespace Build;
+
+public static class DockerExtensions
 {
     public static void DockerBuild(
         this ICakeContext context,

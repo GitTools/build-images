@@ -1,3 +1,5 @@
+namespace Build;
+
 public enum Architecture
 {
     Arm64,

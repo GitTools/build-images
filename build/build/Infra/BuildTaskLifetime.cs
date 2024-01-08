@@ -1,4 +1,6 @@
-﻿public class BuildTaskLifetime : FrostingTaskLifetime
+﻿namespace Build;
+
+public class BuildTaskLifetime : FrostingTaskLifetime
 {
     public override void Setup(ICakeContext context, ITaskSetupContext info)
     {
