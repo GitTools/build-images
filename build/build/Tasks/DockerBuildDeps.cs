@@ -26,7 +26,7 @@ public sealed class DockerBuildDeps : DockerBaseTask
     protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) =>
         DirectoryPath.FromString($"./src/linux/{dockerImage.Distro}");
 
-    protected override DockerImageBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
+    protected override DockerBuildXBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
     {
         var buildSettings = base.GetBuildSettings(dockerImage, registry);
         var (distro, arch) = dockerImage;
@@ -35,11 +35,8 @@ public sealed class DockerBuildDeps : DockerBaseTask
         buildSettings.File = $"{workDir}/Dockerfile";
         buildSettings.Label =
         [
-            "maintainers=GitTools Maintainers",
+            ..buildSettings.Label,
             $"org.opencontainers.image.description=GitTools deps images ({distro}-{arch.ToSuffix()})",
-            "org.opencontainers.image.authors=GitTools Maintainers",
-            "org.opencontainers.image.licenses=MIT",
-            "org.opencontainers.image.source=https://github.com/GitTools/build-images.git"
         ];
 
         return buildSettings;

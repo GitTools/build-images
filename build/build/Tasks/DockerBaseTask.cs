@@ -6,7 +6,7 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
     {
         var buildSettings = GetBuildSettings(dockerImage, context.DockerRegistry);
 
-        context.DockerBuild(buildSettings, GetWorkingDir(dockerImage).ToString(), "--output type=docker");
+        context.DockerBuildXBuild(buildSettings, GetWorkingDir(dockerImage).ToString());
 
         var dockerTags = GetDockerTags(dockerImage, context.DockerRegistry, dockerImage.Architecture).ToArray();
 
@@ -36,16 +36,26 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
         }
     }
 
-    protected virtual DockerImageBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
+    protected virtual DockerBuildXBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
     {
         var arch = dockerImage.Architecture;
+        var suffix = arch.ToSuffix();
         var dockerTags = GetDockerTags(dockerImage, registry, arch).ToArray();
-        var buildSettings = new DockerImageBuildSettings
+        var buildSettings = new DockerBuildXBuildSettings
         {
             Rm = true,
             Tag = dockerTags,
-            Platform = string.Join(",", $"linux/{arch.ToString().ToLower()}"),
+            Platform = [$"linux/{suffix}"],
+            Output = ["type=docker"],
             Pull = true,
+            NoCache = true,
+            Label =
+            [
+                "maintainers=GitTools Maintainers",
+                "org.opencontainers.image.authors=GitTools Maintainers",
+                "org.opencontainers.image.licenses=MIT",
+                "org.opencontainers.image.source=https://github.com/GitTools/build-images.git"
+            ],
         };
         return buildSettings;
     }

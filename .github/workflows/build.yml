@@ -27,7 +27,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
-
     -
       name: '[Prepare]'
       if: steps.cache-cake.outputs.cache-hit != 'true'
@@ -58,18 +57,20 @@ jobs:
         path: run
         key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
     -
+        name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: '8.0.x'
+    -
       name: Setup QEMU
       uses: docker/setup-qemu-action@v3
     -
-      name: Setup Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      with:
-        install: true
-    -
-      name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+        name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+            version: 'latest'
+            driver-opts: 'image=moby/buildkit:buildx-stable-1'
+            install: true
     -
       name: Login to DockerHub
       if: success() && env.PUSH_IMAGES == 'true'
@@ -83,7 +84,7 @@ jobs:
       run: |
         dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
                              --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub `
-                             --push_images=${{env.PUSH_IMAGES}}
+                             --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
     -
       name: Login to GitHub Container Registry
       if: success() && env.PUSH_IMAGES == 'true'
@@ -98,4 +99,4 @@ jobs:
       run: |
         dotnet run/build.dll --target=DockerBuild --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
                              --dotnet_distro=${{ matrix.distro }} --docker_registry=github `
-                             --push_images=${{env.PUSH_IMAGES}}
+                             --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
