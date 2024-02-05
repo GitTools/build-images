@@ -65,6 +65,11 @@ jobs:
         with:
             dotnet-version: '8.0.x'
     -
+      name: Set up Docker
+      uses: crazy-max/ghaction-setup-docker@v3
+      with:
+        daemon-config: '{ "features": { "containerd-snapshotter": true } }'
+    -
       name: Setup QEMU
       uses: docker/setup-qemu-action@v3
     -
