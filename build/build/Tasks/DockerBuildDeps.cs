@@ -1,3 +1,5 @@
+using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
+
 namespace Build;
 
 [TaskName(nameof(DockerBuildDeps))]
@@ -35,7 +37,12 @@ public sealed class DockerBuildDeps : DockerBaseTask
         buildSettings.File = $"{workDir}/Dockerfile";
         buildSettings.Label =
         [
-            ..buildSettings.Label,
+            .. buildSettings.Label,
+            $"org.opencontainers.image.description=GitTools deps images ({distro}-{arch.ToSuffix()})",
+        ];
+        buildSettings.Annotation =
+        [
+            .. buildSettings.Annotation,
             $"org.opencontainers.image.description=GitTools deps images ({distro}-{arch.ToSuffix()})",
         ];
 

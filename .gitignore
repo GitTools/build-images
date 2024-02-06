@@ -106,3 +106,5 @@ Dockerfile.build
 build/build/tools/
 
 run/
+
+*.tar
