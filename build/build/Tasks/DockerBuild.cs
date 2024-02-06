@@ -1,4 +1,5 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
+using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
@@ -49,14 +50,27 @@ public sealed class DockerBuild : DockerBaseTask
         buildSettings.Label =
         [
             .. buildSettings.Label,
-            $"org.opencontainers.image.description=GitTools build images {suffix})",
+            $"org.opencontainers.image.description=GitTools build images {suffix}",
         ];
         buildSettings.Annotation =
         [
             .. buildSettings.Annotation,
-            $"org.opencontainers.image.description=GitTools build images {suffix})",
+            $"org.opencontainers.image.description=GitTools build images {suffix}",
         ];
         return buildSettings;
+    }
+
+    protected override DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
+    {
+        var (distro, version, variant, _) = (DockerImage)dockerImage;
+        var suffix = $"({distro}-{variant}-{version})";
+        var settings = base.GetManifestSettings(dockerImage, tag);
+        settings.Annotation =
+        [
+            .. settings.Annotation,
+            $"index:org.opencontainers.image.description=GitTools build images {suffix}",
+        ];
+        return settings;
     }
 
     protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,

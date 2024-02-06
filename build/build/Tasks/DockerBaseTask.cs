@@ -38,16 +38,22 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
             var amd64Tag = $"{tag}-{Architecture.Amd64.ToSuffix()}";
             var arm64Tag = $"{tag}-{Architecture.Arm64.ToSuffix()}";
 
-            var settings = new DockerBuildXImageToolsCreateSettings
-            {
-                Tag = [tag],
-                Annotation =
-                [
-                    .. Annotations.Select(a => "index:" + a).ToArray(),
-                ]
-            };
+            var settings = GetManifestSettings(dockerImage, tag);
             context.DockerBuildXImageToolsCreate(settings, [amd64Tag, arm64Tag]);
         }
+    }
+
+    protected virtual DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
+    {
+        var settings = new DockerBuildXImageToolsCreateSettings
+        {
+            Tag = [tag],
+            Annotation =
+            [
+                .. Annotations.Select(a => "index:" + a).ToArray(),
+            ]
+        };
+        return settings;
     }
 
     protected virtual DockerBuildXBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)

@@ -1,4 +1,5 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
+using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
@@ -47,6 +48,17 @@ public sealed class DockerBuildDeps : DockerBaseTask
         ];
 
         return buildSettings;
+    }
+
+    protected override DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
+    {
+        var settings = base.GetManifestSettings(dockerImage, tag);
+        settings.Annotation =
+        [
+            .. settings.Annotation,
+            $"index:org.opencontainers.image.description=GitTools deps images ({dockerImage.Distro})",
+        ];
+        return settings;
     }
 
     protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
