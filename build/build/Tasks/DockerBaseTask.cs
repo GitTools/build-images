@@ -64,11 +64,11 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
         var buildSettings = new DockerBuildXBuildSettings
         {
             Rm = true,
+            Pull = true,
+            // NoCache = true,
             Tag = dockerTags,
             Platform = [$"linux/{suffix}"],
             Output = ["type=docker,oci-mediatypes=true"],
-            Pull = true,
-            // NoCache = true,
             Label =
             [
                 "maintainers=GitTools Maintainers",
