@@ -20,6 +20,7 @@ public static class Constants
         "debian.11",
         "fedora.37",
         "ubuntu.20.04",
-        "ubuntu.22.04"
+        "ubuntu.22.04",
+        "ubuntu.24.04"
     ];
 }
