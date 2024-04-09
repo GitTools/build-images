@@ -108,3 +108,5 @@ build/build/tools/
 run/
 
 *.tar
+
+.DS_Store
