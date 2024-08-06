@@ -9,8 +9,7 @@ public static class Constants
     public const string DockerImageDeps = "gittools/deps";
 
     public static readonly Architecture[] ArchToBuild = [Architecture.Amd64, Architecture.Arm64];
-    public static readonly string VersionForDockerLatest = "8.0";
-    public static readonly string[] VersionsToBuild = ["8.0", "7.0", "6.0"];
+    public static readonly string[] VersionsToBuild = ["8.0", "6.0"];
     public static readonly string[] VariantsToBuild = ["sdk", "runtime"];
     public static readonly string[] DockerDistrosToBuild =
     [
@@ -23,4 +22,5 @@ public static class Constants
         "ubuntu.22.04",
         "ubuntu.24.04"
     ];
+    public static readonly string VersionForDockerLatest = VersionsToBuild[0];
 }
