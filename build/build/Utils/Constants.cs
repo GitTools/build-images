@@ -13,11 +13,11 @@ public static class Constants
     public static readonly string[] VariantsToBuild = ["sdk", "runtime"];
     public static readonly string[] DockerDistrosToBuild =
     [
-        "alpine.3.17",
-        "alpine.3.18",
-        "centos.stream.8",
-        "debian.11",
-        "fedora.37",
+        "alpine.3.19",
+        "alpine.3.20",
+        "centos.stream.9",
+        "debian.12",
+        "fedora.40",
         "ubuntu.20.04",
         "ubuntu.22.04",
         "ubuntu.24.04"

@@ -9,5 +9,5 @@ RUN apt-get update \
 
 RUN apt-get update \
     && apt-get install -y git \
-    libc6 libgcc1 libgssapi-krb5-2 libicu66 libssl1.1 libstdc++6 zlib1g \
+    ca-certificates libc6 libgcc-s1 libicu66 libssl1.1 libstdc++6 zlib1g \
     && rm -rf /var/lib/apt/lists/*
