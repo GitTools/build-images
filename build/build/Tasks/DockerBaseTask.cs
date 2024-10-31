@@ -5,13 +5,15 @@ namespace Build;
 
 public abstract class DockerBaseTask : FrostingTask<BuildContext>
 {
+    protected const string Prefix = "org.opencontainers.image";
+
     private static readonly string[] Annotations =
     [
-        "org.opencontainers.image.authors=GitTools Maintainers",
-        "org.opencontainers.image.vendor=GitTools",
-        "org.opencontainers.image.licenses=MIT",
-        "org.opencontainers.image.source=https://github.com/GitTools/build-images.git",
-        $"org.opencontainers.image.created={DateTime.UtcNow:O}",
+        $"{Prefix}.authors=GitTools Maintainers",
+        $"{Prefix}.vendor=GitTools",
+        $"{Prefix}.licenses=MIT",
+        $"{Prefix}.source=https://github.com/GitTools/build-images.git",
+        $"{Prefix}.created={DateTime.UtcNow:O}",
     ];
 
     protected virtual void DockerImage(BuildContext context, DockerDepsImage dockerImage)

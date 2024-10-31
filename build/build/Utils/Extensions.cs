@@ -29,9 +29,6 @@ public static class Extensions
 
     public static string ToSuffix(this Architecture arch) => arch.ToString().ToLower();
 
-    public static DirectoryPath Combine(this string path, string segment) => DirectoryPath.FromString(path).Combine(segment);
-    public static FilePath CombineWithFilePath(this string path, string segment) => DirectoryPath.FromString(path).CombineWithFilePath(segment);
-
     /// <summary>
     /// Escapes arbitrary values so that the process receives the exact string you intend and injection is impossible.
     /// Spec: https://msdn.microsoft.com/en-us/library/bb776391.aspx

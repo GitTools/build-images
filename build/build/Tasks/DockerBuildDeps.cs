@@ -39,12 +39,12 @@ public sealed class DockerBuildDeps : DockerBaseTask
         buildSettings.Label =
         [
             .. buildSettings.Label,
-            $"org.opencontainers.image.description=GitTools deps images ({distro}-{arch.ToSuffix()})",
+            $"{Prefix}.description=GitTools deps images ({distro}-{arch.ToSuffix()})"
         ];
         buildSettings.Annotation =
         [
             .. buildSettings.Annotation,
-            $"org.opencontainers.image.description=GitTools deps images ({distro}-{arch.ToSuffix()})",
+            $"{Prefix}.description=GitTools deps images ({distro}-{arch.ToSuffix()})"
         ];
 
         return buildSettings;
@@ -56,7 +56,7 @@ public sealed class DockerBuildDeps : DockerBaseTask
         settings.Annotation =
         [
             .. settings.Annotation,
-            $"index:org.opencontainers.image.description=GitTools deps images ({dockerImage.Distro})",
+            $"index:{Prefix}.description=GitTools deps images ({dockerImage.Distro})"
         ];
         return settings;
     }
@@ -66,7 +66,7 @@ public sealed class DockerBuildDeps : DockerBaseTask
     {
         var tags = new[]
         {
-            $"{dockerRegistry}/{Constants.DockerImageDeps}:{dockerImage.Distro}",
+            $"{dockerRegistry}/{Constants.DockerImageDeps}:{dockerImage.Distro}"
         };
 
         if (!arch.HasValue) return tags;

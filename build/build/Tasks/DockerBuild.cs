@@ -50,12 +50,12 @@ public sealed class DockerBuild : DockerBaseTask
         buildSettings.Label =
         [
             .. buildSettings.Label,
-            $"org.opencontainers.image.description=GitTools build images {suffix}",
+            $"{Prefix}.description=GitTools build images {suffix}"
         ];
         buildSettings.Annotation =
         [
             .. buildSettings.Annotation,
-            $"org.opencontainers.image.description=GitTools build images {suffix}",
+            $"{Prefix}.description=GitTools build images {suffix}"
         ];
         return buildSettings;
     }
@@ -68,7 +68,7 @@ public sealed class DockerBuild : DockerBaseTask
         settings.Annotation =
         [
             .. settings.Annotation,
-            $"index:org.opencontainers.image.description=GitTools build images {suffix}",
+            $"index:{Prefix}.description=GitTools build images {suffix}",
         ];
         return settings;
     }
@@ -80,14 +80,14 @@ public sealed class DockerBuild : DockerBaseTask
 
         var tags = new List<string>
         {
-            $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}",
+            $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}"
         };
 
         if (version == Constants.DockerDistroLatest)
         {
             tags.AddRange(new[]
             {
-                $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest",
+                $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest"
             });
         }
 
