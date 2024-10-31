@@ -17,6 +17,8 @@ jobs:
     prepare:
         name: Prepare Build
         runs-on: ubuntu-latest
+        outputs:
+            dockerDistros: ${{ steps.set_matrix.outputs.dockerDistros }}
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
@@ -33,6 +35,9 @@ jobs:
             -   name: '[Prepare]'
                 if: steps.cache-cake.outputs.cache-hit != 'true'
                 run: dotnet build build/CI.sln --configuration=Release
+            -   name: '[Matrix]'
+                id: set_matrix
+                run: dotnet run/build.dll --target=SetMatrix
 
     build_deps:
         name: Deps
@@ -42,14 +47,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                distro:
-                    - alpine.3.20
-                    - centos.stream.9
-                    - debian.12
-                    - fedora.40
-                    - ubuntu.20.04
-                    - ubuntu.22.04
-                    - ubuntu.24.04
+                distro: ${{ fromJson(needs.prepare.outputs.dockerDistros) }}
             fail-fast: false
         steps:
             -   name: Checkout

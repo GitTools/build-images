@@ -14,9 +14,9 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
 
         context.Information($"Building for Version: {dotnetVersion}, Variant: {dotnetVariant}, Distro: {dockerDistro}, Push: {pushImages}");
 
-        var versions = string.IsNullOrWhiteSpace(dotnetVersion) ? Constants.VersionsToBuild : [dotnetVersion];
-        var variants = string.IsNullOrWhiteSpace(dotnetVariant) ? Constants.VariantsToBuild : [dotnetVariant];
-        var distros = string.IsNullOrWhiteSpace(dockerDistro) ? Constants.DockerDistrosToBuild : [dockerDistro];
+        var versions = string.IsNullOrWhiteSpace(dotnetVersion) ? Constants.DotnetVersions : [dotnetVersion];
+        var variants = string.IsNullOrWhiteSpace(dotnetVariant) ? Constants.DotnetVariants : [dotnetVariant];
+        var distros = string.IsNullOrWhiteSpace(dockerDistro) ? Constants.DockerDistros : [dockerDistro];
         var archs = architecture.HasValue ? [architecture.Value] : Constants.ArchToBuild;
 
         context.PushImages = pushImages;

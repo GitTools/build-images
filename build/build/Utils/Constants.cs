@@ -9,17 +9,30 @@ public static class Constants
     public const string DockerImageDeps = "gittools/deps";
 
     public static readonly Architecture[] ArchToBuild = [Architecture.Amd64, Architecture.Arm64];
-    public static readonly string[] VersionsToBuild = ["8.0", "6.0"];
-    public static readonly string[] VariantsToBuild = ["sdk", "runtime"];
-    public static readonly string[] DockerDistrosToBuild =
+    public static readonly string[] DotnetVariants = ["sdk", "runtime"];
+
+    public const string VersionCurrent = "6.0";
+    public const string VersionLatest = "8.0";
+    public static readonly string[] DotnetVersions = [VersionCurrent, VersionLatest];
+
+    public const string AlpineLatest = "alpine.3.20";
+    public const string CentosStreamLatest = "centos.stream.9";
+    public const string DebianLatest = "debian.12";
+    public const string FedoraLatest = "fedora.40";
+    public const string Ubuntu2004 = "ubuntu.20.04";
+    public const string Ubuntu2204 = "ubuntu.22.04";
+    public const string Ubuntu2404 = "ubuntu.24.04";
+
+    public const string DockerDistroLatest = DebianLatest;
+
+    public static readonly string[] DockerDistros =
     [
-        "alpine.3.20",
-        "centos.stream.9",
-        "debian.12",
-        "fedora.40",
-        "ubuntu.20.04",
-        "ubuntu.22.04",
-        "ubuntu.24.04"
+        AlpineLatest,
+        CentosStreamLatest,
+        DebianLatest,
+        FedoraLatest,
+        Ubuntu2004,
+        Ubuntu2204,
+        Ubuntu2404
     ];
-    public static readonly string VersionForDockerLatest = VersionsToBuild[0];
 }
