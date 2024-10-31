@@ -11,9 +11,8 @@ public static class Constants
     public static readonly Architecture[] ArchToBuild = [Architecture.Amd64, Architecture.Arm64];
     public static readonly string[] DotnetVariants = ["sdk", "runtime"];
 
-    public const string VersionCurrent = "6.0";
     public const string VersionLatest = "8.0";
-    public static readonly string[] DotnetVersions = [VersionCurrent, VersionLatest];
+    public static readonly string[] DotnetVersions = [VersionLatest, "6.0"];
 
     public const string AlpineLatest = "alpine.3.20";
     public const string CentosStreamLatest = "centos.stream.9";
