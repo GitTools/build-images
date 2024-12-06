@@ -63,7 +63,7 @@ jobs:
                 with:
                     global-json-file: build/global.json
             -   name: Set up Docker
-                uses: crazy-max/ghaction-setup-docker@v3
+                uses: docker/setup-docker-action@v4
                 with:
                     daemon-config: '{ "features": { "containerd-snapshotter": true } }'
             -   name: Setup QEMU
