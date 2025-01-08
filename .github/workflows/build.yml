@@ -9,7 +9,7 @@ on:
 jobs:
     prepare:
         name: Prepare Build
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         outputs:
             dockerDistros: ${{ steps.set_matrix.outputs.dockerDistros }}
             dotnetVersions: ${{ steps.set_matrix.outputs.dotnetVersions }}
@@ -40,7 +40,7 @@ jobs:
         needs: [ prepare ]
         env:
             PUSH_IMAGES: ${{github.event_name != 'pull_request' && github.repository_owner == 'GitTools'}}
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         strategy:
             matrix:
                 distro:  ${{ fromJson(needs.prepare.outputs.dockerDistros) }}
