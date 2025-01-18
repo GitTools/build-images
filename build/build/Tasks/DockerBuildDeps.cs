@@ -19,11 +19,11 @@ public sealed class DockerBuildDeps : DockerBaseTask
             return;
 
         // build/push manifests
-        foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
-        {
-            var dockerImage = group.First();
-            DockerManifest(context, dockerImage);
-        }
+        // foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
+        // {
+        //     var dockerImage = group.First();
+        //     DockerManifest(context, dockerImage);
+        // }
     }
 
     protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) =>

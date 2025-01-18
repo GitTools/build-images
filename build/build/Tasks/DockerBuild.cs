@@ -19,11 +19,11 @@ public sealed class DockerBuild : DockerBaseTask
             return;
 
         // build/push manifests
-        foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version }))
-        {
-            var dockerImage = group.First();
-            DockerManifest(context, dockerImage);
-        }
+        // foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version }))
+        // {
+        //     var dockerImage = group.First();
+        //     DockerManifest(context, dockerImage);
+        // }
     }
 
     protected override void DockerImage(BuildContext context, DockerDepsImage dockerImage)
