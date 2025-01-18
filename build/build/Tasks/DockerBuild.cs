@@ -85,10 +85,10 @@ public sealed class DockerBuild : DockerBaseTask
 
         if (version == Constants.DockerDistroLatest)
         {
-            tags.AddRange(new[]
-            {
+            tags.AddRange(
+            [
                 $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest"
-            });
+            ]);
         }
 
         if (!arch.HasValue) return tags;
