@@ -1,27 +1,27 @@
 version: 2
 updates:
-- package-ecosystem: dotnet-sdk
-  labels:
-      - "dependencies"
-  commit-message:
-      prefix: "(deps)"
-  directory: "/build"
-  schedule:
-      interval: daily
-- package-ecosystem: nuget
-  labels:
-    - "dependencies"
-  commit-message:
-    prefix: "(deps)"
-  directory: "/build"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-- package-ecosystem: github-actions
-  labels:
-    - "dependencies"
-  commit-message:
-    prefix: "(build deps)"
-  directory: "/"
-  schedule:
-    interval: daily
+    -   package-ecosystem: dotnet-sdk
+        labels:
+            - "dependencies"
+        commit-message:
+            prefix: "(deps)"
+        directory: "/build"
+        schedule:
+            interval: daily
+    -   package-ecosystem: nuget
+        labels:
+            - "dependencies"
+        commit-message:
+            prefix: "(deps)"
+        directory: "/build"
+        schedule:
+            interval: daily
+        open-pull-requests-limit: 10
+    -   package-ecosystem: github-actions
+        labels:
+            - "dependencies"
+        commit-message:
+            prefix: "(build deps)"
+        directory: "/"
+        schedule:
+            interval: daily
