@@ -5,7 +5,7 @@ namespace Build;
 
 [TaskName(nameof(DockerBuildDeps))]
 [TaskDescription("Builds the docker images dependencies")]
-public sealed class DockerBuildDeps : DockerBaseTask
+public sealed class DockerBuildDeps : DockerBuildBase
 {
     public override void Run(BuildContext context)
     {

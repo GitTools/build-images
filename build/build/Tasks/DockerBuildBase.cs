@@ -3,7 +3,7 @@ using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImage
 
 namespace Build;
 
-public abstract class DockerBaseTask : FrostingTask<BuildContext>
+public abstract class DockerBuildBase : FrostingTask<BuildContext>
 {
     protected const string Prefix = "org.opencontainers.image";
 
