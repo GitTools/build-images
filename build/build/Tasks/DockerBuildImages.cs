@@ -1,5 +1,4 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
-using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
@@ -14,16 +13,6 @@ public sealed class DockerBuildImages : BaseDockerBuild
         {
             DockerImage(context, dockerImage);
         }
-
-        if (!context.PushImages)
-            return;
-
-        // build/push manifests
-        // foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version }))
-        // {
-        //     var dockerImage = group.First();
-        //     DockerManifest(context, dockerImage);
-        // }
     }
 
     protected override void DockerImage(BuildContext context, DockerDepsImage dockerImage)

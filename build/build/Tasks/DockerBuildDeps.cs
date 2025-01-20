@@ -1,5 +1,4 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
-using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
@@ -14,16 +13,6 @@ public sealed class DockerBuildDeps : BaseDockerBuild
         {
             DockerImage(context, dockerImage);
         }
-
-        if (!context.PushImages)
-            return;
-
-        // build/push manifests
-        // foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
-        // {
-        //     var dockerImage = group.First();
-        //     DockerManifest(context, dockerImage);
-        // }
     }
 
     protected override DirectoryPath GetWorkingDir(DockerDepsImage dockerImage) =>
