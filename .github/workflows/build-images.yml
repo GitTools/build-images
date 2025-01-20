@@ -18,6 +18,8 @@ jobs:
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
+                with:
+                    ref: ${{ github.event.workflow_run.head_branch }}
             -   name: Cache cake frosting
                 id: cache-cake
                 uses: actions/cache@v4
@@ -58,6 +60,8 @@ jobs:
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
+                with:
+                    ref: ${{ github.event.workflow_run.head_branch }}
             -   name: Use cached cake frosting
                 id: cache-cake
                 uses: actions/cache@v4
@@ -124,6 +128,8 @@ jobs:
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
+                with:
+                    ref: ${{ github.event.workflow_run.head_branch }}
             -   name: Use cached cake frosting
                 id: cache-cake
                 uses: actions/cache@v4
