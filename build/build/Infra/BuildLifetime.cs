@@ -9,7 +9,7 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
         var dockerRegistry = context.Argument("docker_registry", "").ToLower();
         var dotnetVersion = context.Argument("dotnet_version", "").ToLower();
         var dotnetVariant = context.Argument("dotnet_variant", "").ToLower();
-        var dockerDistro = context.Argument("dotnet_distro", "").ToLower();
+        var dockerDistro = context.Argument("docker_distro", "").ToLower();
         var pushImages = context.Argument("push_images", false);
 
         context.Information($"Building for Version: {dotnetVersion}, Variant: {dotnetVariant}, Distro: {dockerDistro}, Push: {pushImages}");

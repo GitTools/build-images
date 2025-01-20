@@ -95,7 +95,7 @@ jobs:
                     dotnet run/build.dll `
                         --target=DockerBuildImages --arch=${{ matrix.arch }} `
                         --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
-                        --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub `
+                        --docker_distro=${{ matrix.distro }} --docker_registry=dockerhub `
                         --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
             -   name: Login to GitHub Container Registry
                 if: success() && env.PUSH_IMAGES == 'true'
@@ -110,7 +110,7 @@ jobs:
                     dotnet run/build.dll `
                         --target=DockerBuildImages --arch=${{ matrix.arch }} `
                         --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
-                        --dotnet_distro=${{ matrix.distro }} --docker_registry=github `
+                        --docker_distro=${{ matrix.distro }} --docker_registry=github `
                         --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
 
     build_images_manifest:
@@ -164,7 +164,7 @@ jobs:
                     dotnet run/build.dll `
                         --target=DockerBuildImagesManifest `
                         --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
-                        --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub `
+                        --docker_distro=${{ matrix.distro }} --docker_registry=dockerhub `
                         --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
             -   name: Login to GitHub Container Registry
                 if: success() && env.PUSH_IMAGES == 'true'
@@ -179,5 +179,5 @@ jobs:
                     dotnet run/build.dll `
                         --target=DockerBuildImagesManifest `
                         --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
-                        --dotnet_distro=${{ matrix.distro }} --docker_registry=github `
+                        --docker_distro=${{ matrix.distro }} --docker_registry=github `
                         --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic

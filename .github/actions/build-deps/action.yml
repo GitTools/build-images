@@ -35,5 +35,5 @@ runs:
             run: |
                 dotnet run/build.dll `
                         --target=DockerBuildDeps --arch=${{ inputs.arch }} `
-                        --dotnet_distro=${{ inputs.docker_distro }} --docker_registry=${{ inputs.docker_registry_name }} `
+                        --docker_distro=${{ inputs.docker_distro }} --docker_registry=${{ inputs.docker_registry_name }} `
                         --push_images=${{ env.PUSH_IMAGES }} --verbosity=diagnostic
