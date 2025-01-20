@@ -35,7 +35,7 @@ jobs:
                 id: set_matrix
                 run: dotnet run/build.dll --target=SetMatrix
 
-    build:
+    build_images:
         name: Build Images (${{ matrix.arch }} - ${{ matrix.distro }}) (${{ matrix.version }} - ${{ matrix.variant }})
         needs: [ prepare ]
         env:
@@ -104,6 +104,72 @@ jobs:
                 run: |
                     dotnet run/build.dll `
                         --target=DockerBuildImages --arch=${{ matrix.arch }} `
+                        --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
+                        --dotnet_distro=${{ matrix.distro }} --docker_registry=github `
+                        --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
+
+    build_images_manifest:
+        name: Build Images (${{ matrix.distro }}) (${{ matrix.version }} - ${{ matrix.variant }})
+        needs: [ prepare, build_images ]
+        env:
+            PUSH_IMAGES: ${{github.event_name != 'pull_request' && github.repository_owner == 'GitTools'}}
+        runs-on: ubuntu-24.04
+        strategy:
+            matrix:
+                distro: ${{ fromJson(needs.prepare.outputs.dockerDistros) }}
+                version: ${{ fromJson(needs.prepare.outputs.dotnetVersions) }}
+                variant: ${{ fromJson(needs.prepare.outputs.dotnetVariants) }}
+            fail-fast: false
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+            -   name: Use cached cake frosting
+                id: cache-cake
+                uses: actions/cache@v4
+                with:
+                    path: run
+                    key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+            -   name: Setup .NET SDK
+                uses: actions/setup-dotnet@v4
+                with:
+                    global-json-file: build/global.json
+            -   name: Set up Docker
+                uses: docker/setup-docker-action@v4
+                with:
+                    daemon-config: '{ "features": { "containerd-snapshotter": true } }'
+            -   name: Setup Docker Buildx
+                uses: docker/setup-buildx-action@v3
+                with:
+                    version: 'latest'
+                    driver-opts: 'image=moby/buildkit:buildx-stable-1'
+                    install: true
+            -   name: Login to DockerHub
+                if: success() && env.PUSH_IMAGES == 'true'
+                uses: docker/login-action@v3
+                with:
+                    username: ${{ secrets.DOCKER_USERNAME }}
+                    password: ${{ secrets.DOCKER_PASSWORD }}
+            -   name: '[Build Docker images]'
+                shell: pwsh
+                run: |
+                    dotnet run/build.dll `
+                        --target=DockerBuildImagesManifest `
+                        --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
+                        --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub `
+                        --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
+            -   name: Login to GitHub Container Registry
+                if: success() && env.PUSH_IMAGES == 'true'
+                uses: docker/login-action@v3
+                with:
+                    registry: ghcr.io
+                    username: ${{ github.repository_owner }}
+                    password: ${{ secrets.DOCKER_GITHUB_TOKEN }}
+            -   name: '[Build Docker images]'
+                shell: pwsh
+                run: |
+                    dotnet run/build.dll `
+                        --target=DockerBuildImagesManifest `
                         --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
                         --dotnet_distro=${{ matrix.distro }} --docker_registry=github `
                         --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic

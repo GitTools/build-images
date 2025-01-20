@@ -1,6 +1,8 @@
 namespace Build;
 using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
+[TaskName(nameof(DockerBuildImagesManifest))]
+[TaskDescription("Builds the docker images manifest")]
 public class DockerBuildImagesManifest : BaseDockerBuildManifest
 {
     public override void Run(BuildContext context)

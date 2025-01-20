@@ -108,7 +108,7 @@ jobs:
                             --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
 
     build_deps_manifests:
-        name: Build Deps Manifests
+        name: Build Deps Manifests (${{ matrix.distro }})
         needs: [ prepare, build_deps ]
         env:
             PUSH_IMAGES: ${{github.event_name != 'pull_request' && github.repository_owner == 'GitTools'}}
