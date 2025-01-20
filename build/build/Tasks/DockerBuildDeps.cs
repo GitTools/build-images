@@ -60,18 +60,4 @@ public sealed class DockerBuildDeps : DockerBuildBase
         ];
         return settings;
     }
-
-    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
-        Architecture? arch = null)
-    {
-        var tags = new[]
-        {
-            $"{dockerRegistry}/{Constants.DockerImageDeps}:{dockerImage.Distro}"
-        };
-
-        if (!arch.HasValue) return tags;
-
-        var suffix = arch.Value.ToSuffix();
-        return tags.Select(x => $"{x}-{suffix}");
-    }
 }

@@ -73,29 +73,6 @@ public sealed class DockerBuildImages : DockerBuildBase
         return settings;
     }
 
-    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
-        Architecture? arch = null)
-    {
-        var (distro, version, variant, _) = (dockerImage as DockerImage)!;
-
-        var tags = new List<string>
-        {
-            $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}"
-        };
-
-        if (version == Constants.DockerDistroLatest)
-        {
-            tags.AddRange(
-            [
-                $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest"
-            ]);
-        }
-
-        if (!arch.HasValue) return tags;
-
-        var suffix = arch.Value.ToSuffix();
-        return tags.Select(x => $"{x}-{suffix}");
-    }
 
     private static void GenerateDockerfile(ICakeContext context, DirectoryPath? workDir, DockerDepsImage dockerImage)
     {

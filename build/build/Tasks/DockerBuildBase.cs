@@ -34,7 +34,7 @@ public abstract class DockerBuildBase : FrostingTask<BuildContext>
 
     protected void DockerManifest(BuildContext context, DockerDepsImage dockerImage)
     {
-        var manifestTags = GetDockerTags(dockerImage, context.DockerRegistry);
+        var manifestTags = dockerImage.GetDockerTags(context.DockerRegistry);
         foreach (var tag in manifestTags)
         {
             var amd64Tag = $"{tag}-{Architecture.Amd64.ToSuffix()}";
@@ -62,7 +62,7 @@ public abstract class DockerBuildBase : FrostingTask<BuildContext>
     {
         var arch = dockerImage.Architecture;
         var suffix = arch.ToSuffix();
-        var dockerTags = GetDockerTags(dockerImage, registry, arch).ToArray();
+        var dockerTags = dockerImage.GetDockerTags(registry, arch).ToArray();
         var buildSettings = new DockerBuildXBuildSettings
         {
             Rm = true,
@@ -82,7 +82,4 @@ public abstract class DockerBuildBase : FrostingTask<BuildContext>
     }
 
     protected abstract DirectoryPath GetWorkingDir(DockerDepsImage dockerImage);
-
-    protected abstract IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
-        Architecture? arch = null);
 }
