@@ -5,7 +5,7 @@ namespace Build;
 
 [TaskName(nameof(DockerBuildImages))]
 [TaskDescription("Builds the docker images")]
-public sealed class DockerBuildImages : DockerBuildBase
+public sealed class DockerBuildImages : BaseDockerBuild
 {
     public override void Run(BuildContext context)
     {
@@ -59,20 +59,6 @@ public sealed class DockerBuildImages : DockerBuildBase
         ];
         return buildSettings;
     }
-
-    protected override DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
-    {
-        var (distro, version, variant, _) = (DockerImage)dockerImage;
-        var suffix = $"({distro}-{variant}-{version})";
-        var settings = base.GetManifestSettings(dockerImage, tag);
-        settings.Annotation =
-        [
-            .. settings.Annotation,
-            $"index:{Prefix}.description=GitTools build images {suffix}",
-        ];
-        return settings;
-    }
-
 
     private static void GenerateDockerfile(ICakeContext context, DirectoryPath? workDir, DockerDepsImage dockerImage)
     {

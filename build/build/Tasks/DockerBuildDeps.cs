@@ -5,7 +5,7 @@ namespace Build;
 
 [TaskName(nameof(DockerBuildDeps))]
 [TaskDescription("Builds the docker images dependencies")]
-public sealed class DockerBuildDeps : DockerBuildBase
+public sealed class DockerBuildDeps : BaseDockerBuild
 {
     public override void Run(BuildContext context)
     {
@@ -48,16 +48,5 @@ public sealed class DockerBuildDeps : DockerBuildBase
         ];
 
         return buildSettings;
-    }
-
-    protected override DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
-    {
-        var settings = base.GetManifestSettings(dockerImage, tag);
-        settings.Annotation =
-        [
-            .. settings.Annotation,
-            $"index:{Prefix}.description=GitTools deps images ({dockerImage.Distro})"
-        ];
-        return settings;
     }
 }

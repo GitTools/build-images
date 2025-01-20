@@ -1,9 +1,8 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
-using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
-public abstract class DockerBuildBase : FrostingTask<BuildContext>
+public abstract class BaseDockerBuild : FrostingTask<BuildContext>
 {
     protected const string Prefix = "org.opencontainers.image";
 
@@ -30,32 +29,6 @@ public abstract class DockerBuildBase : FrostingTask<BuildContext>
         {
             context.DockerPush(tag);
         }
-    }
-
-    protected void DockerManifest(BuildContext context, DockerDepsImage dockerImage)
-    {
-        var manifestTags = dockerImage.GetDockerTags(context.DockerRegistry);
-        foreach (var tag in manifestTags)
-        {
-            var amd64Tag = $"{tag}-{Architecture.Amd64.ToSuffix()}";
-            var arm64Tag = $"{tag}-{Architecture.Arm64.ToSuffix()}";
-
-            var settings = GetManifestSettings(dockerImage, tag);
-            context.DockerBuildXImageToolsCreate(settings, [amd64Tag, arm64Tag]);
-        }
-    }
-
-    protected virtual DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
-    {
-        var settings = new DockerBuildXImageToolsCreateSettings
-        {
-            Tag = [tag],
-            Annotation =
-            [
-                .. Annotations.Select(a => "index:" + a).ToArray(),
-            ]
-        };
-        return settings;
     }
 
     protected virtual DockerBuildXBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
