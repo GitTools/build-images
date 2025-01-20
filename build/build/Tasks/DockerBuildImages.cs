@@ -1,11 +1,10 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
-using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
-[TaskName(nameof(DockerBuild))]
+[TaskName(nameof(DockerBuildImages))]
 [TaskDescription("Builds the docker images")]
-public sealed class DockerBuild : DockerBaseTask
+public sealed class DockerBuildImages : BaseDockerBuild
 {
     public override void Run(BuildContext context)
     {
@@ -13,16 +12,6 @@ public sealed class DockerBuild : DockerBaseTask
         foreach (var dockerImage in context.Images)
         {
             DockerImage(context, dockerImage);
-        }
-
-        if (!context.PushImages)
-            return;
-
-        // build/push manifests
-        foreach (var group in context.Images.GroupBy(x => new { x.Distro, x.Variant, x.Version }))
-        {
-            var dockerImage = group.First();
-            DockerManifest(context, dockerImage);
         }
     }
 
@@ -58,43 +47,6 @@ public sealed class DockerBuild : DockerBaseTask
             $"{Prefix}.description=GitTools build images {suffix}"
         ];
         return buildSettings;
-    }
-
-    protected override DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
-    {
-        var (distro, version, variant, _) = (DockerImage)dockerImage;
-        var suffix = $"({distro}-{variant}-{version})";
-        var settings = base.GetManifestSettings(dockerImage, tag);
-        settings.Annotation =
-        [
-            .. settings.Annotation,
-            $"index:{Prefix}.description=GitTools build images {suffix}",
-        ];
-        return settings;
-    }
-
-    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
-        Architecture? arch = null)
-    {
-        var (distro, version, variant, _) = (dockerImage as DockerImage)!;
-
-        var tags = new List<string>
-        {
-            $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-{version}"
-        };
-
-        if (version == Constants.DockerDistroLatest)
-        {
-            tags.AddRange(new[]
-            {
-                $"{dockerRegistry}/{Constants.DockerImageName}:{distro}-{variant}-latest"
-            });
-        }
-
-        if (!arch.HasValue) return tags;
-
-        var suffix = arch.Value.ToSuffix();
-        return tags.Select(x => $"{x}-{suffix}");
     }
 
     private static void GenerateDockerfile(ICakeContext context, DirectoryPath? workDir, DockerDepsImage dockerImage)

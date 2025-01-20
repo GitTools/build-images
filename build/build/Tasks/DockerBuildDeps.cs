@@ -1,11 +1,10 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
-using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
 [TaskName(nameof(DockerBuildDeps))]
 [TaskDescription("Builds the docker images dependencies")]
-public sealed class DockerBuildDeps : DockerBaseTask
+public sealed class DockerBuildDeps : BaseDockerBuild
 {
     public override void Run(BuildContext context)
     {
@@ -13,16 +12,6 @@ public sealed class DockerBuildDeps : DockerBaseTask
         foreach (var dockerImage in context.DepsImages)
         {
             DockerImage(context, dockerImage);
-        }
-
-        if (!context.PushImages)
-            return;
-
-        // build/push manifests
-        foreach (var group in context.DepsImages.GroupBy(x => new { x.Distro }))
-        {
-            var dockerImage = group.First();
-            DockerManifest(context, dockerImage);
         }
     }
 
@@ -48,30 +37,5 @@ public sealed class DockerBuildDeps : DockerBaseTask
         ];
 
         return buildSettings;
-    }
-
-    protected override DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
-    {
-        var settings = base.GetManifestSettings(dockerImage, tag);
-        settings.Annotation =
-        [
-            .. settings.Annotation,
-            $"index:{Prefix}.description=GitTools deps images ({dockerImage.Distro})"
-        ];
-        return settings;
-    }
-
-    protected override IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
-        Architecture? arch = null)
-    {
-        var tags = new[]
-        {
-            $"{dockerRegistry}/{Constants.DockerImageDeps}:{dockerImage.Distro}"
-        };
-
-        if (!arch.HasValue) return tags;
-
-        var suffix = arch.Value.ToSuffix();
-        return tags.Select(x => $"{x}-{suffix}");
     }
 }

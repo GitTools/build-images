@@ -1,9 +1,8 @@
 using DockerBuildXBuildSettings = Build.Cake.Docker.DockerBuildXBuildSettings;
-using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 namespace Build;
 
-public abstract class DockerBaseTask : FrostingTask<BuildContext>
+public abstract class BaseDockerBuild : FrostingTask<BuildContext>
 {
     protected const string Prefix = "org.opencontainers.image";
 
@@ -32,37 +31,11 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
         }
     }
 
-    protected void DockerManifest(BuildContext context, DockerDepsImage dockerImage)
-    {
-        var manifestTags = GetDockerTags(dockerImage, context.DockerRegistry);
-        foreach (var tag in manifestTags)
-        {
-            var amd64Tag = $"{tag}-{Architecture.Amd64.ToSuffix()}";
-            var arm64Tag = $"{tag}-{Architecture.Arm64.ToSuffix()}";
-
-            var settings = GetManifestSettings(dockerImage, tag);
-            context.DockerBuildXImageToolsCreate(settings, [amd64Tag, arm64Tag]);
-        }
-    }
-
-    protected virtual DockerBuildXImageToolsCreateSettings GetManifestSettings(DockerDepsImage dockerImage, string tag)
-    {
-        var settings = new DockerBuildXImageToolsCreateSettings
-        {
-            Tag = [tag],
-            Annotation =
-            [
-                .. Annotations.Select(a => "index:" + a).ToArray(),
-            ]
-        };
-        return settings;
-    }
-
     protected virtual DockerBuildXBuildSettings GetBuildSettings(DockerDepsImage dockerImage, string registry)
     {
         var arch = dockerImage.Architecture;
         var suffix = arch.ToSuffix();
-        var dockerTags = GetDockerTags(dockerImage, registry, arch).ToArray();
+        var dockerTags = dockerImage.GetDockerTags(registry, arch).ToArray();
         var buildSettings = new DockerBuildXBuildSettings
         {
             Rm = true,
@@ -82,7 +55,4 @@ public abstract class DockerBaseTask : FrostingTask<BuildContext>
     }
 
     protected abstract DirectoryPath GetWorkingDir(DockerDepsImage dockerImage);
-
-    protected abstract IEnumerable<string> GetDockerTags(DockerDepsImage dockerImage, string dockerRegistry,
-        Architecture? arch = null);
 }
