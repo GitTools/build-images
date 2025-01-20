@@ -40,7 +40,7 @@ jobs:
                 run: dotnet run/build.dll --target=SetMatrix
 
     build_deps:
-        name: Deps (${{ matrix.arch }} - ${{ matrix.distro }})
+        name: Build Deps (${{ matrix.arch }} - ${{ matrix.distro }})
         needs: [ prepare ]
         env:
             PUSH_IMAGES: ${{github.event_name != 'pull_request' && github.repository_owner == 'GitTools'}}

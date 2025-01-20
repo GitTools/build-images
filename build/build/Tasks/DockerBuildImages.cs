@@ -3,9 +3,9 @@ using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImage
 
 namespace Build;
 
-[TaskName(nameof(DockerBuild))]
+[TaskName(nameof(DockerBuildImages))]
 [TaskDescription("Builds the docker images")]
-public sealed class DockerBuild : DockerBaseTask
+public sealed class DockerBuildImages : DockerBaseTask
 {
     public override void Run(BuildContext context)
     {

@@ -1,0 +1,109 @@
+name: Build Images
+
+on:
+    workflow_dispatch:
+    workflow_run:
+        workflows: [ Build Deps ]
+        types:
+            - completed
+jobs:
+    prepare:
+        name: Prepare Build
+        runs-on: ubuntu-24.04
+        outputs:
+            dockerDistros: ${{ steps.set_matrix.outputs.dockerDistros }}
+            dotnetVersions: ${{ steps.set_matrix.outputs.dotnetVersions }}
+            dotnetVariants: ${{ steps.set_matrix.outputs.dotnetVariants }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+            -   name: Cache cake frosting
+                id: cache-cake
+                uses: actions/cache@v4
+                with:
+                    path: run
+                    key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+            -   name: Setup .NET SDK
+                uses: actions/setup-dotnet@v4
+                with:
+                    global-json-file: build/global.json
+            -   name: '[Prepare]'
+                if: steps.cache-cake.outputs.cache-hit != 'true'
+                run: dotnet build build/CI.sln --configuration=Release
+            -   name: '[Matrix]'
+                id: set_matrix
+                run: dotnet run/build.dll --target=SetMatrix
+
+    build:
+        name: Build Images (${{ matrix.arch }} - ${{ matrix.distro }}) (${{ matrix.version }} - ${{ matrix.variant }})
+        needs: [ prepare ]
+        env:
+            PUSH_IMAGES: ${{github.event_name != 'pull_request' && github.repository_owner == 'GitTools'}}
+        runs-on: ${{ matrix.runner }}
+        strategy:
+            matrix:
+                arch: [ amd64, arm64 ]
+                runner: [ ubuntu-24.04, ubuntu-24.04-arm ]
+                distro: ${{ fromJson(needs.prepare.outputs.dockerDistros) }}
+                version: ${{ fromJson(needs.prepare.outputs.dotnetVersions) }}
+                variant: ${{ fromJson(needs.prepare.outputs.dotnetVariants) }}
+                exclude:
+                    -   runner: ubuntu-24.04-arm
+                        arch: amd64
+                    -   runner: ubuntu-24.04
+                        arch: arm64
+            fail-fast: false
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+            -   name: Use cached cake frosting
+                id: cache-cake
+                uses: actions/cache@v4
+                with:
+                    path: run
+                    key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+            -   name: Setup .NET SDK
+                uses: actions/setup-dotnet@v4
+                with:
+                    global-json-file: build/global.json
+            -   name: Set up Docker
+                uses: docker/setup-docker-action@v4
+                with:
+                    daemon-config: '{ "features": { "containerd-snapshotter": true } }'
+            -   name: Setup Docker Buildx
+                uses: docker/setup-buildx-action@v3
+                with:
+                    version: 'latest'
+                    driver-opts: 'image=moby/buildkit:buildx-stable-1'
+                    install: true
+            -   name: Login to DockerHub
+                if: success() && env.PUSH_IMAGES == 'true'
+                uses: docker/login-action@v3
+                with:
+                    username: ${{ secrets.DOCKER_USERNAME }}
+                    password: ${{ secrets.DOCKER_PASSWORD }}
+            -   name: '[Build Docker images]'
+                shell: pwsh
+                run: |
+                    dotnet run/build.dll `
+                        --target=DockerBuildImages --arch=${{ matrix.arch }} `
+                        --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
+                        --dotnet_distro=${{ matrix.distro }} --docker_registry=dockerhub `
+                        --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
+            -   name: Login to GitHub Container Registry
+                if: success() && env.PUSH_IMAGES == 'true'
+                uses: docker/login-action@v3
+                with:
+                    registry: ghcr.io
+                    username: ${{ github.repository_owner }}
+                    password: ${{ secrets.DOCKER_GITHUB_TOKEN }}
+            -   name: '[Build Docker images]'
+                shell: pwsh
+                run: |
+                    dotnet run/build.dll `
+                        --target=DockerBuildImages --arch=${{ matrix.arch }} `
+                        --dotnet_version=${{ matrix.version }} --dotnet_variant=${{ matrix.variant }} `
+                        --dotnet_distro=${{ matrix.distro }} --docker_registry=github `
+                        --push_images=${{env.PUSH_IMAGES}} --verbosity=diagnostic
