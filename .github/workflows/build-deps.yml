@@ -18,7 +18,7 @@ jobs:
         name: Prepare Build
         runs-on: ubuntu-24.04
         outputs:
-            dockerDistros: ${{ steps.set_matrix.outputs.dockerDistros }}
+            docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
         with:
             runner: ${{ matrix.runner }}
             arch: ${{ matrix.arch }}
-            docker_distros: ${{ needs.prepare.outputs.dockerDistros }}
+            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
 
     build_deps_manifests:
         name: Build Deps Manifests
@@ -63,4 +63,4 @@ jobs:
         needs: [ prepare, build_deps ]
         uses: ./.github/workflows/_build-deps-manifest.yml
         with:
-            docker_distros: ${{ needs.prepare.outputs.dockerDistros }}
+            docker_distros: ${{ needs.prepare.outputs.docker_distros }}

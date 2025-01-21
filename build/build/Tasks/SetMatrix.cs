@@ -8,9 +8,9 @@ public class SetMatrix : FrostingTask<BuildContext>
     {
         if (context.BuildSystem().IsRunningOnGitHubActions)
         {
-            context.GitHubActions().Commands.SetOutputParameter("dockerDistros", context.SerializeJson(Constants.DockerDistros));
-            context.GitHubActions().Commands.SetOutputParameter("dotnetVersions", context.SerializeJson(Constants.DotnetVersions));
-            context.GitHubActions().Commands.SetOutputParameter("dotnetVariants", context.SerializeJson(Constants.DotnetVariants));
+            context.GitHubActions().Commands.SetOutputParameter("docker_distros", context.SerializeJson(Constants.DockerDistros));
+            context.GitHubActions().Commands.SetOutputParameter("dotnet_versions", context.SerializeJson(Constants.DotnetVersions));
+            context.GitHubActions().Commands.SetOutputParameter("dotnet_variants", context.SerializeJson(Constants.DotnetVariants));
         }
         else
         {

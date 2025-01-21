@@ -11,9 +11,9 @@ jobs:
         name: Prepare Build
         runs-on: ubuntu-24.04
         outputs:
-            dockerDistros: ${{ steps.set_matrix.outputs.dockerDistros }}
-            dotnetVersions: ${{ steps.set_matrix.outputs.dotnetVersions }}
-            dotnetVariants: ${{ steps.set_matrix.outputs.dotnetVariants }}
+            docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
+            dotnet_versions: ${{ steps.set_matrix.outputs.dotnet_versions }}
+            dotnet_variants: ${{ steps.set_matrix.outputs.dotnet_variants }}
         if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
         steps:
             -   name: Checkout
@@ -42,7 +42,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnetVariants) }}
+                dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnet_variants) }}
                 arch: [ amd64, arm64 ]
                 runner: [ ubuntu-24.04, ubuntu-24.04-arm ]
                 exclude:
@@ -56,8 +56,8 @@ jobs:
             runner: ${{ matrix.runner }}
             arch: ${{ matrix.arch }}
             dotnet_variant: ${{ matrix.dotnet_variant }}
-            dotnet_versions: ${{ needs.prepare.outputs.dotnetVersions }}
-            docker_distros: ${{ needs.prepare.outputs.dockerDistros }}
+            dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
+            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
 
     build_images_manifest:
         name: Build Images Manifest (${{ matrix.dotnet_variant }})
@@ -66,11 +66,11 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnetVariants) }}
+                dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnet_variants) }}
 
         uses: ./.github/workflows/_build-images-manifest.yml
         with:
             runner: ${{ matrix.runner }}
             dotnet_variant: ${{ matrix.dotnet_variant }}
-            dotnet_versions: ${{ needs.prepare.outputs.dotnetVersions }}
-            docker_distros: ${{ needs.prepare.outputs.dockerDistros }}
+            dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
+            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
