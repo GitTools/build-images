@@ -1,0 +1,59 @@
+on:
+    workflow_call:
+        inputs:
+            runner:
+                required: true
+                type: string
+            arch:
+                required: true
+                type: string
+            docker_distros:
+                required: true
+                type: string
+env:
+    DOTNET_INSTALL_DIR: "./.dotnet"
+    DOTNET_ROLL_FORWARD: "Major"
+
+jobs:
+    build_deps:
+        name: ${{ matrix.docker_distro }}
+        env:
+            PUSH_IMAGES: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
+        runs-on: ${{ inputs.runner }}
+        strategy:
+            fail-fast: false
+            matrix:
+                docker_distro: ${{ fromJson(inputs.docker_distros) }}
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+            -   name: Use cached cake frosting
+                id: cache-cake
+                uses: actions/cache@v4
+                with:
+                    path: run
+                    key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+            -   name: Setup .NET SDK
+                uses: actions/setup-dotnet@v4
+                with:
+                    global-json-file: build/global.json
+            -   name: Set up Docker
+                uses: ./.github/actions/docker-setup
+            -   name: Publish image to DockerHub
+                uses: ./.github/actions/build-deps
+                with:
+                    arch: ${{ inputs.arch }}
+                    docker_distro: ${{ matrix.docker_distro }}
+                    docker_registry: docker.io
+                    docker_registry_name: dockerhub
+                    docker_registry_username: ${{ secrets.DOCKER_USERNAME }}
+                    docker_registry_password: ${{ secrets.DOCKER_PASSWORD }}
+            -   name: Publish image to GitHub
+                uses: ./.github/actions/build-deps
+                with:
+                    arch: ${{ inputs.arch }}
+                    docker_distro: ${{ matrix.docker_distro }}
+                    docker_registry: ghcr.io
+                    docker_registry_name: github
+                    docker_registry_username: ${{ github.repository_owner }}
+                    docker_registry_password: ${{ secrets.DOCKER_GITHUB_TOKEN }}
