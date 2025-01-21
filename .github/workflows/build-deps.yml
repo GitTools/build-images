@@ -41,25 +41,26 @@ jobs:
 
     build_deps:
         name: Build Deps (${{ matrix.arch }})
+        secrets: inherit
         needs: [ prepare ]
         strategy:
             fail-fast: false
             matrix:
                 include:
-                    - arch: amd64
-                      runner: ubuntu-24.04
-                    - arch: arm64
-                      runner: ubuntu-24.04-arm
+                    -   arch: amd64
+                        runner: ubuntu-24.04
+                    -   arch: arm64
+                        runner: ubuntu-24.04-arm
         uses: ./.github/workflows/_build-deps.yml
         with:
             runner: ${{ matrix.runner }}
             arch: ${{ matrix.arch }}
             docker_distros: ${{ needs.prepare.outputs.dockerDistros }}
-        secrets: inherit
+
     build_deps_manifests:
         name: Build Deps Manifests
+        secrets: inherit
         needs: [ prepare, build_deps ]
         uses: ./.github/workflows/_build-deps-manifest.yml
         with:
             docker_distros: ${{ needs.prepare.outputs.dockerDistros }}
-        secrets: inherit

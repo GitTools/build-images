@@ -13,12 +13,11 @@ on:
 env:
     DOTNET_INSTALL_DIR: "./.dotnet"
     DOTNET_ROLL_FORWARD: "Major"
+    PUSH_IMAGES: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
 
 jobs:
     build_deps:
         name: ${{ matrix.docker_distro }}
-        env:
-            PUSH_IMAGES: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
         runs-on: ${{ inputs.runner }}
         strategy:
             fail-fast: false

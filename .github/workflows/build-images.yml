@@ -37,6 +37,7 @@ jobs:
 
     build_images:
         name: Build Images (${{ matrix.dotnet_variant }} - ${{ matrix.arch }})
+        secrets: inherit
         needs: [ prepare ]
         strategy:
             fail-fast: false
