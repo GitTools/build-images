@@ -4,9 +4,6 @@ on:
             runner:
                 required: true
                 type: string
-            arch:
-                required: true
-                type: string
             dotnet_variant:
                 required: true
                 type: string
@@ -22,9 +19,9 @@ env:
     PUSH_IMAGES: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
 
 jobs:
-    build_images:
+    build_images_manifest:
         name: ${{ matrix.docker_distro }} - net${{ matrix.dotnet_version }}
-        runs-on: ${{ inputs.runner }}
+        runs-on: ubuntu-24.04
         strategy:
             fail-fast: false
             matrix:
@@ -46,10 +43,9 @@ jobs:
                     global-json-file: build/global.json
             -   name: Set up Docker
                 uses: ./.github/actions/docker-setup
-            -   name: Publish image to DockerHub
-                uses: ./.github/actions/build-images
+            -   name: Publish image manifest to DockerHub
+                uses: ./.github/actions/build-images-manifest
                 with:
-                    arch: ${{ inputs.arch }}
                     dotnet_variant: ${{ inputs.dotnet_variant }}
                     dotnet_version: ${{ matrix.dotnet_version }}
                     docker_distro: ${{ matrix.docker_distro }}
@@ -57,10 +53,9 @@ jobs:
                     docker_registry_name: dockerhub
                     docker_registry_username: ${{ secrets.DOCKER_USERNAME }}
                     docker_registry_password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Publish image to GitHub
-                uses: ./.github/actions/build-images
+            -   name: Publish image manifest to GitHub
+                uses: ./.github/actions/build-images-manifest
                 with:
-                    arch: ${{ inputs.arch }}
                     dotnet_variant: ${{ inputs.dotnet_variant }}
                     dotnet_version: ${{ matrix.dotnet_version }}
                     docker_distro: ${{ matrix.docker_distro }}
