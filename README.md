@@ -1,2 +1,2 @@
 # build-images
-Docker build images for GitVersion
+Docker build images for GitVersion & LibGit2Sharp
