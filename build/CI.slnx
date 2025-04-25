@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/sln/">
+    <File Path="../.github/workflows/build-deps.yml" />
+    <File Path="../.github/workflows/build-images.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="build/Build.csproj" />
+</Solution>
