@@ -1,5 +1,7 @@
 name: Build Deps
 
+permissions: read-all
+
 on:
     workflow_dispatch:
     push:
