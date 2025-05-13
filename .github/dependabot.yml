@@ -7,7 +7,8 @@ updates:
             prefix: "(sdk)"
         directory: "/build"
         schedule:
-            interval: daily
+            interval: cron
+            cronjob: "0 12 * * *"
     -   package-ecosystem: nuget
         labels:
             - "dependencies"
@@ -15,7 +16,8 @@ updates:
             prefix: "(deps)"
         directory: "/build"
         schedule:
-            interval: daily
+            interval: cron
+            cronjob: "0 12 * * *"
         open-pull-requests-limit: 10
     -   package-ecosystem: github-actions
         labels:
@@ -24,4 +26,5 @@ updates:
             prefix: "(build deps)"
         directory: "/"
         schedule:
-            interval: daily
+            interval: cron
+            cronjob: "0 12 * * *"
