@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.21
 USER root
 # Pre-requisits
 RUN apk add bash wget git \

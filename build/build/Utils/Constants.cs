@@ -14,11 +14,10 @@ public static class Constants
     public const string VersionLatest = "8.0";
     public static readonly string[] DotnetVersions = [VersionLatest, "9.0"];
 
-    public const string AlpineLatest = "alpine.3.20";
+    public const string AlpineLatest = "alpine.3.21";
     public const string CentosStreamLatest = "centos.stream.9";
     public const string DebianLatest = "debian.12";
-    public const string FedoraLatest = "fedora.40";
-    public const string Ubuntu2004 = "ubuntu.20.04";
+    public const string FedoraLatest = "fedora.41";
     public const string Ubuntu2204 = "ubuntu.22.04";
     public const string Ubuntu2404 = "ubuntu.24.04";
 
@@ -30,7 +29,6 @@ public static class Constants
         CentosStreamLatest,
         DebianLatest,
         FedoraLatest,
-        Ubuntu2004,
         Ubuntu2204,
         Ubuntu2404
     ];
