@@ -18,8 +18,14 @@ jobs:
             dotnet_variants: ${{ steps.set_matrix.outputs.dotnet_variants }}
         if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
         steps:
+            -   name: Get branch from triggering workflow_run
+                if: github.event_name == 'workflow_run'
+                id: get_branch
+                run: echo "branch=$(jq -r .workflow_run.head_branch < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
             -   name: Checkout
                 uses: actions/checkout@v4
+                with:
+                    ref: ${{ github.event_name == 'workflow_run' && steps.get_branch.outputs.branch || github.ref_name }}
             -   name: Cache cake frosting
                 id: cache-cake
                 uses: actions/cache@v4
