@@ -23,7 +23,7 @@ jobs:
                 id: get_branch
                 run: echo "branch=$(jq -r .workflow_run.head_branch < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
             -   name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v5
                 with:
                     ref: ${{ github.event_name == 'workflow_run' && steps.get_branch.outputs.branch || github.ref_name }}
             -   name: Cache cake frosting
