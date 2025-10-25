@@ -1,4 +1,4 @@
-FROM fedora:41
+FROM fedora:42
 
 RUN dnf install -y wget git findutils \
     krb5-libs libicu openssl-libs zlib glibc-langpack-en \
