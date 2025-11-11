@@ -11,8 +11,8 @@ public static class Constants
     public static readonly Architecture[] ArchToBuild = [Architecture.Amd64, Architecture.Arm64];
     public static readonly string[] DotnetVariants = ["sdk", "runtime"];
 
-    public const string DotnetLtsLatest = "8.0";
-    public static readonly string[] DotnetVersions = [DotnetLtsLatest, "9.0"];
+    public const string DotnetLtsLatest = "10.0";
+    public static readonly string[] DotnetVersions = [DotnetLtsLatest, "9.0", "8.0"];
 
     public const string AlpineLatest = "alpine.3.22";
     public const string CentosLatest = "centos.stream.9";
@@ -20,7 +20,7 @@ public static class Constants
     public const string FedoraLatest = "fedora.42";
     public const string UbuntuLatest = "ubuntu.24.04";
 
-    public const string DockerDistroLatest = DebianLatest;
+    public const string DockerDistroLatest = UbuntuLatest;
 
     public static readonly string[] DockerDistros =
     [
