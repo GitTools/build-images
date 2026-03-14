@@ -3,82 +3,82 @@ name: Build Images
 permissions: read-all
 
 on:
-    workflow_dispatch:
-    workflow_run:
-        workflows: [ Build Deps ]
-        types:
-            - completed
+  workflow_dispatch:
+  workflow_run:
+    workflows: [ Build Deps ]
+    types:
+      - completed
 jobs:
-    prepare:
-        name: Prepare Build
-        runs-on: ubuntu-24.04
-        outputs:
-            docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
-            dotnet_versions: ${{ steps.set_matrix.outputs.dotnet_versions }}
-            dotnet_variants: ${{ steps.set_matrix.outputs.dotnet_variants }}
-        if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-        steps:
-            -   name: Get branch from triggering workflow_run
-                if: github.event_name == 'workflow_run'
-                id: get_branch
-                run: echo "branch=$(jq -r .workflow_run.head_branch < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
-            -   name: Checkout
-                uses: actions/checkout@v6
-                with:
-                    ref: ${{ github.event_name == 'workflow_run' && steps.get_branch.outputs.branch || github.ref_name }}
-            -   name: Cache cake frosting
-                id: cache-cake
-                uses: actions/cache@v5
-                with:
-                    path: run
-                    key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
-            -   name: Setup .NET SDK
-                uses: actions/setup-dotnet@v5
-                with:
-                    global-json-file: build/global.json
-            -   name: '[Prepare]'
-                if: steps.cache-cake.outputs.cache-hit != 'true'
-                run: dotnet build build/ --configuration=Release
-            -   name: '[Matrix]'
-                id: set_matrix
-                run: dotnet run/build.dll --target=SetMatrix
-
-    build_images:
-        name: Build Images (${{ matrix.dotnet_variant }} - ${{ matrix.arch }})
-        secrets: inherit
-        needs: [ prepare ]
-        strategy:
-            fail-fast: false
-            matrix:
-                dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnet_variants) }}
-                arch: [ amd64, arm64 ]
-                runner: [ ubuntu-24.04, ubuntu-24.04-arm ]
-                exclude:
-                    -   runner: ubuntu-24.04-arm
-                        arch: amd64
-                    -   runner: ubuntu-24.04
-                        arch: arm64
-
-        uses: ./.github/workflows/_build-images.yml
+  prepare:
+    name: Prepare Build
+    runs-on: ubuntu-24.04
+    outputs:
+      docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
+      dotnet_versions: ${{ steps.set_matrix.outputs.dotnet_versions }}
+      dotnet_variants: ${{ steps.set_matrix.outputs.dotnet_variants }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Get branch from triggering workflow_run
+        if: github.event_name == 'workflow_run'
+        id: get_branch
+        run: echo "branch=$(jq -r .workflow_run.head_branch < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
-            runner: ${{ matrix.runner }}
-            arch: ${{ matrix.arch }}
-            dotnet_variant: ${{ matrix.dotnet_variant }}
-            dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
-            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
-
-    build_images_manifest:
-        name: Build Images Manifest (${{ matrix.dotnet_variant }})
-        secrets: inherit
-        needs: [ prepare, build_images ]
-        strategy:
-            fail-fast: false
-            matrix:
-                dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnet_variants) }}
-
-        uses: ./.github/workflows/_build-images-manifest.yml
+          ref: ${{ github.event_name == 'workflow_run' && steps.get_branch.outputs.branch || github.ref_name }}
+      - name: Cache cake frosting
+        id: cache-cake
+        uses: actions/cache@v5
         with:
-            runner: ${{ matrix.runner }}
-            dotnet_variant: ${{ matrix.dotnet_variant }}
-            dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
-            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
+          path: run
+          key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: build/global.json
+      - name: '[Prepare]'
+        if: steps.cache-cake.outputs.cache-hit != 'true'
+        run: dotnet build build/ --configuration=Release
+      - name: '[Matrix]'
+        id: set_matrix
+        run: dotnet run/build.dll --target=SetMatrix
+
+  build_images:
+    name: Build Images (${{ matrix.dotnet_variant }} - ${{ matrix.arch }})
+    secrets: inherit
+    needs: [ prepare ]
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnet_variants) }}
+        arch: [ amd64, arm64 ]
+        runner: [ ubuntu-24.04, ubuntu-24.04-arm ]
+        exclude:
+          - runner: ubuntu-24.04-arm
+            arch: amd64
+          - runner: ubuntu-24.04
+            arch: arm64
+
+    uses: ./.github/workflows/_build-images.yml
+    with:
+      runner: ${{ matrix.runner }}
+      arch: ${{ matrix.arch }}
+      dotnet_variant: ${{ matrix.dotnet_variant }}
+      dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
+      docker_distros: ${{ needs.prepare.outputs.docker_distros }}
+
+  build_images_manifest:
+    name: Build Images Manifest (${{ matrix.dotnet_variant }})
+    secrets: inherit
+    needs: [ prepare, build_images ]
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet_variant: ${{ fromJson(needs.prepare.outputs.dotnet_variants) }}
+
+    uses: ./.github/workflows/_build-images-manifest.yml
+    with:
+      runner: ${{ matrix.runner }}
+      dotnet_variant: ${{ matrix.dotnet_variant }}
+      dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
+      docker_distros: ${{ needs.prepare.outputs.docker_distros }}

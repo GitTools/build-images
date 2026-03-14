@@ -3,66 +3,66 @@ name: Build Deps
 permissions: read-all
 
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - main
-            - 'feature/*'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'feature/*'
 
-    pull_request:
-        branches:
-            - main
-    schedule:
-        -   cron: "0 11 * * 1,4"
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 11 * * 1,4"
 
 jobs:
-    prepare:
-        name: Prepare Build
-        runs-on: ubuntu-24.04
-        outputs:
-            docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v6
-            -   name: Cache cake frosting
-                id: cache-cake
-                uses: actions/cache@v5
-                with:
-                    path: run
-                    key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
-            -   name: Setup .NET SDK
-                uses: actions/setup-dotnet@v5
-                with:
-                    global-json-file: build/global.json
-            -   name: '[Prepare]'
-                if: steps.cache-cake.outputs.cache-hit != 'true'
-                run: dotnet build build/ --configuration=Release
-            -   name: '[Matrix]'
-                id: set_matrix
-                run: dotnet run/build.dll --target=SetMatrix
-
-    build_deps:
-        name: Build Deps (${{ matrix.arch }})
-        secrets: inherit
-        needs: [ prepare ]
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    -   arch: amd64
-                        runner: ubuntu-24.04
-                    -   arch: arm64
-                        runner: ubuntu-24.04-arm
-        uses: ./.github/workflows/_build-deps.yml
+  prepare:
+    name: Prepare Build
+    runs-on: ubuntu-24.04
+    outputs:
+      docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Cache cake frosting
+        id: cache-cake
+        uses: actions/cache@v5
         with:
-            runner: ${{ matrix.runner }}
-            arch: ${{ matrix.arch }}
-            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
-
-    build_deps_manifests:
-        name: Build Deps Manifests
-        secrets: inherit
-        needs: [ prepare, build_deps ]
-        uses: ./.github/workflows/_build-deps-manifest.yml
+          path: run
+          key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
         with:
-            docker_distros: ${{ needs.prepare.outputs.docker_distros }}
+          global-json-file: build/global.json
+      - name: '[Prepare]'
+        if: steps.cache-cake.outputs.cache-hit != 'true'
+        run: dotnet build build/ --configuration=Release
+      - name: '[Matrix]'
+        id: set_matrix
+        run: dotnet run/build.dll --target=SetMatrix
+
+  build_deps:
+    name: Build Deps (${{ matrix.arch }})
+    secrets: inherit
+    needs: [ prepare ]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    uses: ./.github/workflows/_build-deps.yml
+    with:
+      runner: ${{ matrix.runner }}
+      arch: ${{ matrix.arch }}
+      docker_distros: ${{ needs.prepare.outputs.docker_distros }}
+
+  build_deps_manifests:
+    name: Build Deps Manifests
+    secrets: inherit
+    needs: [ prepare, build_deps ]
+    uses: ./.github/workflows/_build-deps-manifest.yml
+    with:
+      docker_distros: ${{ needs.prepare.outputs.docker_distros }}
