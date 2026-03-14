@@ -1,0 +1,24 @@
+name: 'Load DockerHub Secrets'
+description: 'Loads DockerHub credentials from 1Password'
+
+outputs:
+  docker_username:
+    description: DockerHub username
+    value: ${{ steps.load.outputs.DOCKER_USERNAME }}
+  docker_password:
+    description: DockerHub password
+    value: ${{ steps.load.outputs.DOCKER_PASSWORD }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Load secrets from 1Password
+      id: load
+      uses: 1password/load-secrets-action@v3
+      with:
+        export-env: false
+      env:
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ env.OP_SERVICE_ACCOUNT_TOKEN }}
+        DOCKER_USERNAME: op://gittools/ci/dockerhub/username
+        DOCKER_PASSWORD: op://gittools/ci/dockerhub/token
+

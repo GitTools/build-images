@@ -69,6 +69,7 @@ jobs:
       dotnet_variant: ${{ matrix.dotnet_variant }}
       dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
       docker_distros: ${{ needs.prepare.outputs.docker_distros }}
+      push_images: ${{ github.repository_owner == 'GitTools' }}
 
   build_images_manifest:
     name: Build Images Manifest (${{ matrix.dotnet_variant }})
@@ -85,3 +86,4 @@ jobs:
       dotnet_variant: ${{ matrix.dotnet_variant }}
       dotnet_versions: ${{ needs.prepare.outputs.dotnet_versions }}
       docker_distros: ${{ needs.prepare.outputs.docker_distros }}
+      push_images: ${{ github.repository_owner == 'GitTools' }}
