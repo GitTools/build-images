@@ -1,5 +1,3 @@
-permissions: read-all
-
 on:
   workflow_call:
     inputs:
@@ -16,6 +14,9 @@ env:
   DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_ROLL_FORWARD: "Major"
   PUSH_IMAGES: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
+
+permissions:
+  packages: write
 
 jobs:
   build_deps:
@@ -57,4 +58,4 @@ jobs:
           docker_registry: ghcr.io
           docker_registry_name: github
           docker_registry_username: ${{ github.repository_owner }}
-          docker_registry_password: ${{ secrets.DOCKER_GITHUB_TOKEN }}
+          docker_registry_password: ${{ github.token }}

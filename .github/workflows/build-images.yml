@@ -1,13 +1,16 @@
 name: Build Images
 
-permissions: read-all
-
 on:
   workflow_dispatch:
   workflow_run:
     workflows: [ Build Deps ]
     types:
       - completed
+
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   prepare:
     name: Prepare Build

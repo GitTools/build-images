@@ -1,7 +1,5 @@
 name: Build Deps
 
-permissions: read-all
-
 on:
   workflow_dispatch:
   push:
@@ -14,6 +12,10 @@ on:
       - main
   schedule:
     - cron: "0 11 * * 1,4"
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   prepare:
