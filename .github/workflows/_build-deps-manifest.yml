@@ -4,10 +4,13 @@ on:
       docker_distros:
         required: true
         type: string
+      push_images:
+        required: true
+        type: boolean
 env:
   DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_ROLL_FORWARD: "Major"
-  PUSH_IMAGES: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
+  PUSH_IMAGES: ${{ inputs.push_images }}
 
 permissions:
   packages: write
@@ -35,14 +38,21 @@ jobs:
           global-json-file: build/global.json
       - name: Set up Docker
         uses: ./.github/actions/docker-setup
+      - name: Load DockerHub credentials
+        id: dockerhub-creds
+        if: env.PUSH_IMAGES == 'true'
+        uses: ./.github/actions/dockerhub-creds
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
       - name: Publish image manifest to DockerHub
+        if: env.PUSH_IMAGES == 'true'
         uses: ./.github/actions/build-deps-manifest
         with:
           docker_distro: ${{ matrix.docker_distro }}
           docker_registry: docker.io
           docker_registry_name: dockerhub
-          docker_registry_username: ${{ secrets.DOCKER_USERNAME }}
-          docker_registry_password: ${{ secrets.DOCKER_PASSWORD }}
+          docker_registry_username: ${{ steps.dockerhub-creds.outputs.docker_username }}
+          docker_registry_password: ${{ steps.dockerhub-creds.outputs.docker_password }}
       - name: Publish image manifest to GitHub
         uses: ./.github/actions/build-deps-manifest
         with:
