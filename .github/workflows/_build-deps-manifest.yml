@@ -42,8 +42,8 @@ jobs:
         id: dockerhub-creds
         if: env.PUSH_IMAGES == 'true'
         uses: ./.github/actions/dockerhub-creds
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+        with:
+          op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
       - name: Publish image manifest to DockerHub
         if: env.PUSH_IMAGES == 'true'
         uses: ./.github/actions/build-deps-manifest

@@ -1,6 +1,11 @@
 name: 'Load DockerHub Secrets'
 description: 'Loads DockerHub credentials from 1Password'
 
+inputs:
+  op_service_account_token:
+    description: '1Password service account token'
+    required: true
+
 outputs:
   docker_username:
     description: DockerHub username
@@ -18,7 +23,6 @@ runs:
       with:
         export-env: false
       env:
-        OP_SERVICE_ACCOUNT_TOKEN: ${{ env.OP_SERVICE_ACCOUNT_TOKEN }}
+        OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op_service_account_token }}
         DOCKER_USERNAME: op://gittools/ci/dockerhub/username
         DOCKER_PASSWORD: op://gittools/ci/dockerhub/token
-
