@@ -1,5 +1,5 @@
 ARG DOTNET_VERSION='8.0'
-ARG TAG='alpine.3.22'
+ARG TAG='alpine.3.23'
 
 FROM gittools/deps:$TAG
 

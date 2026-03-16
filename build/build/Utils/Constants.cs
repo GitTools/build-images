@@ -14,7 +14,7 @@ public static class Constants
     public const string DotnetLtsLatest = "10.0";
     public static readonly string[] DotnetVersions = [DotnetLtsLatest, "9.0", "8.0"];
 
-    public const string AlpineLatest = "alpine.3.22";
+    public const string AlpineLatest = "alpine.3.23";
     public const string CentosLatest = "centos.stream.9";
     public const string DebianLatest = "debian.12";
     public const string FedoraLatest = "fedora.43";
