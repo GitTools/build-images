@@ -41,7 +41,7 @@ jobs:
       - name: Load DockerHub credentials
         id: dockerhub-creds
         if: env.PUSH_IMAGES == 'true'
-        uses: gittools/cicd/dockerhub-creds@main
+        uses: gittools/cicd/dockerhub-creds@v1
         with:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
       - name: Publish image manifest to DockerHub
