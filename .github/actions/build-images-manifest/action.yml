@@ -33,6 +33,7 @@ runs:
         registry: ${{ inputs.docker_registry }}
         username: ${{ inputs.docker_registry_username }}
         password: ${{ inputs.docker_registry_password }}
+
     - name: '[Build Docker images manifest] ${{ inputs.docker_registry }}'
       shell: pwsh
       run: |

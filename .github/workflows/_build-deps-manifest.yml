@@ -26,24 +26,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
       - name: Use cached cake frosting
         id: cache-cake
         uses: actions/cache@v5
         with:
           path: run
           key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           global-json-file: build/global.json
+
       - name: Set up Docker
         uses: ./.github/actions/docker-setup
+
       - name: Load DockerHub credentials
         id: dockerhub-creds
         if: env.PUSH_IMAGES == 'true'
         uses: gittools/cicd/dockerhub-creds@v1
         with:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
       - name: Publish image manifest to DockerHub
         if: env.PUSH_IMAGES == 'true'
         uses: ./.github/actions/build-deps-manifest
@@ -53,6 +58,7 @@ jobs:
           docker_registry_name: dockerhub
           docker_registry_username: ${{ steps.dockerhub-creds.outputs.docker_username }}
           docker_registry_password: ${{ steps.dockerhub-creds.outputs.docker_password }}
+
       - name: Publish image manifest to GitHub
         uses: ./.github/actions/build-deps-manifest
         with:

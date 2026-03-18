@@ -25,23 +25,28 @@ jobs:
         if: github.event_name == 'workflow_run'
         id: get_branch
         run: echo "branch=$(jq -r .workflow_run.head_branch < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+
       - name: Checkout
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event_name == 'workflow_run' && steps.get_branch.outputs.branch || github.ref_name }}
+
       - name: Cache cake frosting
         id: cache-cake
         uses: actions/cache@v5
         with:
           path: run
           key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           global-json-file: build/global.json
+
       - name: '[Prepare]'
         if: steps.cache-cake.outputs.cache-hit != 'true'
         run: dotnet build build/ --configuration=Release
+
       - name: '[Matrix]'
         id: set_matrix
         run: dotnet run/build.dll --target=SetMatrix

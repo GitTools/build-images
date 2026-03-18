@@ -16,7 +16,6 @@ on:
   schedule:
     - cron: "0 11 * * 1,4"
 
-
 jobs:
   prepare:
     name: Prepare Build
@@ -26,19 +25,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
       - name: Cache cake frosting
         id: cache-cake
         uses: actions/cache@v5
         with:
           path: run
           key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v5
         with:
           global-json-file: build/global.json
+
       - name: '[Prepare]'
         if: steps.cache-cake.outputs.cache-hit != 'true'
         run: dotnet build build/ --configuration=Release
+
       - name: '[Matrix]'
         id: set_matrix
         run: dotnet run/build.dll --target=SetMatrix
