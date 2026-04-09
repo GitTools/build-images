@@ -1,4 +1,5 @@
 namespace Build;
+
 using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 public abstract class BaseDockerBuildManifest : FrostingTask<BuildContext>

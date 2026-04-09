@@ -1,4 +1,5 @@
 namespace Build;
+
 using DockerBuildXImageToolsCreateSettings = Build.Cake.Docker.DockerBuildXImageToolsCreateSettings;
 
 [TaskName(nameof(DockerBuildImagesManifest))]
