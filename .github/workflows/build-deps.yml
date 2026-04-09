@@ -49,7 +49,8 @@ jobs:
       contents: read
       packages: write
     name: Build Deps (${{ matrix.arch }})
-    secrets: inherit
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
     needs: [prepare]
     strategy:
       fail-fast: false
@@ -71,7 +72,8 @@ jobs:
       contents: read
       packages: write
     name: Build Deps Manifests
-    secrets: inherit
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
     needs: [prepare, build_deps]
     uses: ./.github/workflows/_build-deps-manifest.yml
     with:

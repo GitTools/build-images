@@ -17,17 +17,12 @@ jobs:
       docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
       dotnet_versions: ${{ steps.set_matrix.outputs.dotnet_versions }}
       dotnet_variants: ${{ steps.set_matrix.outputs.dotnet_variants }}
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request' && github.event.workflow_run.head_repository.full_name == github.repository) }}
     steps:
-      - name: Get branch from triggering workflow_run
-        if: github.event_name == 'workflow_run'
-        id: get_branch
-        run: echo "branch=$(jq -r .workflow_run.head_branch < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
-
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event_name == 'workflow_run' && steps.get_branch.outputs.branch || github.ref_name }}
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
 
       - name: Cache cake frosting
         id: cache-cake
@@ -54,7 +49,8 @@ jobs:
       contents: read
       packages: write
     name: Build Images (${{ matrix.dotnet_variant }} - ${{ matrix.arch }})
-    secrets: inherit
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
     needs: [ prepare ]
     strategy:
       fail-fast: false
@@ -82,7 +78,8 @@ jobs:
       contents: read
       packages: write
     name: Build Images Manifest (${{ matrix.dotnet_variant }})
-    secrets: inherit
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
     needs: [ prepare, build_images ]
     strategy:
       fail-fast: false

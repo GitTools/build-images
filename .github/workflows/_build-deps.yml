@@ -13,6 +13,9 @@ on:
       push_images:
         required: true
         type: boolean
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN:
+        required: false
 env:
   DOTNET_INSTALL_DIR: "./.dotnet"
   DOTNET_ROLL_FORWARD: "Major"
