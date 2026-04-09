@@ -1,6 +1,6 @@
 FROM fedora:43
 
-RUN dnf install -y wget git findutils \
-    krb5-libs libicu openssl-libs zlib glibc-langpack-en \
+RUN dnf install -y findutils git glibc-langpack-en \
+    krb5-libs libicu openssl-libs wget zlib \
     && rm -rf /tmp/*
 
