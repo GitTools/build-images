@@ -62,7 +62,7 @@ jobs:
       - name: Load DockerHub credentials
         id: dockerhub-creds
         if: env.PUSH_IMAGES == 'true'
-        uses: gittools/cicd/dockerhub-creds@v2
+        uses: gittools/cicd/dockerhub-creds@0c8902c4b7acb983d3ca3a2edf24b8ff3967fa94 # v2
         with:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
