@@ -7,12 +7,10 @@ on:
     types:
       - completed
 
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   prepare:
+    permissions:
+      packages: write
     name: Prepare Build
     runs-on: ubuntu-24.04
     outputs:
@@ -52,6 +50,9 @@ jobs:
         run: dotnet run/build.dll --target=SetMatrix
 
   build_images:
+    permissions:
+      contents: read
+      packages: write
     name: Build Images (${{ matrix.dotnet_variant }} - ${{ matrix.arch }})
     secrets: inherit
     needs: [ prepare ]
@@ -77,6 +78,9 @@ jobs:
       push_images: ${{ github.repository_owner == 'GitTools' }}
 
   build_images_manifest:
+    permissions:
+      contents: read
+      packages: write
     name: Build Images Manifest (${{ matrix.dotnet_variant }})
     secrets: inherit
     needs: [ prepare, build_images ]

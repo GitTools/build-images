@@ -1,9 +1,5 @@
 name: Build Deps
 
-permissions:
-  contents: read
-  packages: write
-
 on:
   workflow_dispatch:
   push:
@@ -18,6 +14,8 @@ on:
 
 jobs:
   prepare:
+    permissions:
+      packages: write
     name: Prepare Build
     runs-on: ubuntu-24.04
     outputs:
@@ -38,18 +36,21 @@ jobs:
         with:
           global-json-file: build/global.json
 
-      - name: '[Prepare]'
+      - name: "[Prepare]"
         if: steps.cache-cake.outputs.cache-hit != 'true'
         run: dotnet build build/ --configuration=Release
 
-      - name: '[Matrix]'
+      - name: "[Matrix]"
         id: set_matrix
         run: dotnet run/build.dll --target=SetMatrix
 
   build_deps:
+    permissions:
+      contents: read
+      packages: write
     name: Build Deps (${{ matrix.arch }})
     secrets: inherit
-    needs: [ prepare ]
+    needs: [prepare]
     strategy:
       fail-fast: false
       matrix:
@@ -66,9 +67,12 @@ jobs:
       push_images: ${{ github.event_name != 'pull_request' && github.repository_owner == 'GitTools' }}
 
   build_deps_manifests:
+    permissions:
+      contents: read
+      packages: write
     name: Build Deps Manifests
     secrets: inherit
-    needs: [ prepare, build_deps ]
+    needs: [prepare, build_deps]
     uses: ./.github/workflows/_build-deps-manifest.yml
     with:
       docker_distros: ${{ needs.prepare.outputs.docker_distros }}
