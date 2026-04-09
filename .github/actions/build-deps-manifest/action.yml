@@ -30,8 +30,16 @@ runs:
 
     - name: '[Build Docker Deps manifest] ${{ inputs.docker_registry }}'
       shell: pwsh
+      env:
+        INPUT_DOCKER_DISTRO: ${{ inputs.docker_distro }}
+        INPUT_DOCKER_REGISTRY_NAME: ${{ inputs.docker_registry_name }}
+        PUSH_IMAGES: ${{ env.PUSH_IMAGES }}
       run: |
-        dotnet run/build.dll `
-                --target=DockerBuildDepsManifest `
-                --docker_distro=${{ inputs.docker_distro }} --docker_registry=${{ inputs.docker_registry_name }} `
-                --push_images=${{ env.PUSH_IMAGES }} --verbosity=diagnostic
+        $args = @(
+          '--target=DockerBuildDepsManifest'
+          "--docker_distro=$env:INPUT_DOCKER_DISTRO"
+          "--docker_registry=$env:INPUT_DOCKER_REGISTRY_NAME"
+          "--push_images=$env:PUSH_IMAGES"
+          '--verbosity=diagnostic'
+        )
+        dotnet run/build.dll @args
