@@ -17,17 +17,19 @@ public sealed class BuildLifetime : FrostingLifetime<BuildContext>
         var archs = architecture.HasValue ? [architecture.Value] : Constants.ArchToBuild;
         var variants = string.IsNullOrWhiteSpace(dotnetVariant) ? Constants.DotnetVariants : [dotnetVariant];
 
-        var versions = string.IsNullOrWhiteSpace(dotnetVersion)
-            ? Constants.DotnetVersions
-            : string.Equals(dotnetVersion, "lts-latest", StringComparison.OrdinalIgnoreCase)
-                ? [Constants.DotnetLtsLatest]
-                : [dotnetVersion];
+        var versions = dotnetVersion switch
+        {
+            _ when dotnetVersion.IsNullOrWhiteSpace() => Constants.DotnetVersions,
+            _ when dotnetVersion.IsEqualInvariant("lts-latest") => [Constants.DotnetLtsLatest],
+            _ => [dotnetVersion]
+        };
 
-        var distros = string.IsNullOrWhiteSpace(dockerDistro)
-            ? Constants.DockerDistros
-            : string.Equals(dockerDistro, "distro-latest", StringComparison.OrdinalIgnoreCase)
-                ? [Constants.AlpineLatest]
-                : [dockerDistro];
+        var distros = dockerDistro switch
+        {
+            _ when dockerDistro.IsNullOrWhiteSpace() => Constants.DockerDistros,
+            _ when dockerDistro.IsEqualInvariant("distro-latest") => [Constants.AlpineLatest],
+            _ => [dockerDistro]
+        };
 
         context.PushImages = pushImages;
         context.DepsImages = from distro in distros
