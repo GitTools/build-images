@@ -9,7 +9,7 @@ public static class Extensions
 
     public static IEnumerable<Type> FindAllDerivedTypes(this Assembly assembly, Type baseType) =>
         assembly.GetExportedTypes()
-            .Where(t => baseType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
+            .Where(t => baseType.IsAssignableFrom(t) && t is { IsClass: true, IsAbstract: false });
 
     extension(Type task)
     {
