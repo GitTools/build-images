@@ -58,7 +58,7 @@ public sealed class DockerBuildImages : BaseDockerBuild
             # install dotnet
             RUN wget https://dot.net/v1/dotnet-install.sh -O $HOME/dotnet-install.sh --no-check-certificate\
             && chmod +x $HOME/dotnet-install.sh \
-            && $HOME/dotnet-install.sh --channel $DOTNET_VERSION --install-dir $HOME/.dotnet
+            && $HOME/dotnet-install.sh --channel $DOTNET_VERSION --install-dir /usr/local/bin
             """;
 
         var dockerfile = $"{workDir}/Dockerfile";
