@@ -28,3 +28,43 @@ updates:
     schedule:
       interval: cron
       cronjob: "0 12 * * *"
+
+  - package-ecosystem: nuget
+    directory: /build/build
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux/alpine.3.23
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux/centos.stream.9
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux/debian.12
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux/fedora.43
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux/ubuntu.22.04
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /src/linux/ubuntu.24.04
+    schedule:
+      interval: daily
