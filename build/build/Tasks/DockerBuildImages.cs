@@ -67,6 +67,10 @@ public sealed class DockerBuildImages : BaseDockerBuild
         content.AppendLine();
 
         content.Append(installScript);
+        if (((DockerImage)dockerImage).Version == "11.0")
+        {
+            content.Append($" --version {(variant == "runtime" ? Constants.Dotnet11RuntimeVersion : Constants.Dotnet11SdkVersion)}");
+        }
         if (variant == "runtime")
         {
             content.Append(" --runtime dotnet");
