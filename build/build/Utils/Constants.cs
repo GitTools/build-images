@@ -12,13 +12,15 @@ public static class Constants
     public static readonly string[] DotnetVariants = ["sdk", "runtime"];
 
     public const string DotnetLtsLatest = "10.0";
-    public static readonly string[] DotnetVersions = [DotnetLtsLatest, "9.0", "8.0"];
+    public static readonly string[] DotnetVersions = [DotnetLtsLatest, "11.0"];
+    public const string Dotnet11SdkVersion = "11.0.100-rc.1.26425.128";
+    public const string Dotnet11RuntimeVersion = "11.0.0-rc.1.26425.128";
 
     public const string AlpineLatest = "alpine.3.23";
-    public const string CentosLatest = "centos.stream.9";
-    public const string DebianLatest = "debian.12";
-    public const string FedoraLatest = "fedora.43";
-    public const string UbuntuLatest = "ubuntu.24.04";
+    public const string CentosLatest = "centos.stream.10";
+    public const string DebianLatest = "debian.13";
+    public const string FedoraLatest = "fedora.44";
+    public const string UbuntuLatest = "ubuntu.26.04";
 
     public const string DockerDistroLatest = UbuntuLatest;
 
@@ -29,6 +31,6 @@ public static class Constants
         DebianLatest,
         FedoraLatest,
         UbuntuLatest,
-        "ubuntu.22.04"
+        "ubuntu.24.04"
     ];
 }
