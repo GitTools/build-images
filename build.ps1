@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-if (!(Test-Path run)) {
+if (-not (Test-Path run)) {
     dotnet build build/
 }
 dotnet run/build.dll $args
