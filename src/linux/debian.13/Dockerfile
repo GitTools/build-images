@@ -1,4 +1,5 @@
 FROM debian:13
+# Root is intentional for downstream GitVersion image builds; see README.md#container-user-policy.
 
 ENV DEBIAN_FRONTEND=noninteractive
 
