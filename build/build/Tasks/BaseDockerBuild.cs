@@ -28,7 +28,7 @@ public abstract class BaseDockerBuild : FrostingTask<BuildContext>
             Rm = true,
             Entrypoint = "id",
             Platform = buildSettings.Platform.Single()
-        }, buildSettings.Tag.First(), "-u");
+        }, buildSettings.Tag[0], "-u");
         if (string.Join("", identity).Trim() != "10001")
         {
             throw new CakeException("GitTools images must run as non-root UID 10001 by default.");
