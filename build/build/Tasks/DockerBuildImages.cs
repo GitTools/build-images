@@ -30,10 +30,9 @@ public sealed class DockerBuildImages : BaseDockerBuild
 
         var workDir = GetWorkingDir(dockerImage);
 
-        var image = dockerImage as DockerImage;
         var (distro, version, variant, arch) = (DockerImage)dockerImage;
         buildSettings.File = $"{workDir}/Dockerfile.build";
-        buildSettings.BuildArg = [$"DOTNET_VERSION={image!.Version}", $"TAG={image.Distro}"];
+        buildSettings.BuildArg = [$"DOTNET_VERSION={version}", $"TAG={distro}"];
 
         var suffix = $"({distro}-{variant}-{version}-{arch.ToSuffix()})";
         buildSettings.Label =
