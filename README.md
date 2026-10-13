@@ -6,26 +6,26 @@ Docker build images for GitVersion & LibGit2Sharp
 
 ## Container user policy
 
-All six Linux dependency images intentionally retain their base image's root user.
-This policy also applies to the SDK/runtime images built from them. The generated
-Dockerfiles install .NET into `/usr/local/bin`; GitVersion's downstream Dockerfile
-installs its tool into `/tools` and configures Git in the image user's home directory.
-Changing the inherited user requires coordinated changes and validation in GitVersion.
+All six Linux dependency images and their SDK/runtime derivatives default to
+the `gittools` user, UID/GID `10001:10001`, with home `/home/gittools`.
+Root is used only during image assembly to install OS packages and .NET into
+`/usr/local/bin`. Generated Dockerfiles restore `USER 10001:10001` after installation.
+The build checks the default UID before publishing each image.
 
-The previous non-root `gittools` user was reverted in commit
-`1c848852f342223a523659a7451f762988a3f43b` after downstream compatibility failures.
-Do not reintroduce it solely to clear a static-analysis finding.
+Downstream Dockerfiles that install into system-owned paths must explicitly
+switch to root for those build steps and restore a non-root final user.
+GitVersion's corresponding changes are tracked in
+[GitTools/GitVersion#5207](https://github.com/GitTools/GitVersion/pull/5207).
+Validate that consumer before merging this change: an earlier non-root setup
+was reverted in `1c848852f342223a523659a7451f762988a3f43b` after downstream failures.
 
-For Sonar rule `docker:S6471`, use the same reviewed compatibility exception for
-Alpine 3.23, CentOS Stream 10, Debian 13, Fedora 44, Ubuntu 24.04, and Ubuntu 26.04.
-These are genuine root-user findings, not false positives. Retain the accepted
-issues and document the rationale when reviewing the security hotspots; do not
-disable the rule or exclude the Dockerfiles from analysis.
+Bind-mounted repositories must be writable by the container user when tools
+update Git state or generate build outputs. On Linux, run as the non-root checkout
+owner with `--user "$(id -u):$(id -g)"`; if that UID differs from 10001, also supply
+a writable container-local home, for example `--env HOME=/tmp --env DOTNET_CLI_HOME=/tmp`.
+Do not make the checkout world-writable or recursively change its ownership.
 
-Root in a container remains a security tradeoff, especially with writable host
-mounts. Run these images in isolated build environments without privileged mode
-or a mounted Docker socket. Consumers choosing a non-root runtime user must
-provide suitable home, temporary-directory, and repository-volume permissions
-and validate GitVersion with that configuration. A future default-user change
-must pass GitVersion's Docker build and test matrix across supported distros,
-architectures, .NET versions, and Git backends before publication.
+The GitVersion Docker and artifact test matrix must pass across both architectures,
+supported distros, .NET versions, and Git backends before rollout. Sonar's previously
+accepted root-user findings must be re-evaluated after analysis of these changes;
+the earlier exception does not count as verification of the non-root implementation.

@@ -1,7 +1,14 @@
 FROM quay.io/centos/centos:stream10
-# Root is intentional for downstream GitVersion image builds; see README.md#container-user-policy.
 
 # Pre-requisits
 RUN dnf install -y ca-certificates git glibc glibc-langpack-en \
-    krb5-libs libgcc libicu libstdc++ openssl-libs tzdata wget zlib \
+    krb5-libs libgcc libicu libstdc++ openssl-libs shadow-utils tzdata wget zlib \
     && rm -rf /tmp/*
+RUN groupadd --gid 10001 gittools \
+    && useradd --uid 10001 --gid 10001 --create-home --shell /bin/bash gittools \
+    && mkdir -p /home/gittools/app \
+    && chown -R 10001:10001 /home/gittools
+
+ENV HOME=/home/gittools
+WORKDIR /home/gittools/app
+USER 10001:10001

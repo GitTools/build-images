@@ -22,6 +22,18 @@ public abstract class BaseDockerBuild : FrostingTask<BuildContext>
         var path = GetWorkingDir(dockerImage).ToString();
         context.DockerBuildXBuild(buildSettings, path);
 
+        // Validate the image's default user before any tag can be published.
+        var identity = context.DockerRun(new DockerContainerRunSettings
+        {
+            Rm = true,
+            Entrypoint = "id",
+            Platform = buildSettings.Platform.Single()
+        }, buildSettings.Tag.First(), "-u");
+        if (string.Join("", identity).Trim() != "10001")
+        {
+            throw new CakeException("GitTools images must run as non-root UID 10001 by default.");
+        }
+
         if (!context.PushImages)
             return;
 
