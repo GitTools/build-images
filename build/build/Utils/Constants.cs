@@ -13,8 +13,8 @@ public static class Constants
 
     public const string DotnetLtsLatest = "10.0";
     public static readonly string[] DotnetVersions = [DotnetLtsLatest, "11.0"];
-    public const string Dotnet11SdkVersion = "11.0.100-rc.2.26504.105";
-    public const string Dotnet11RuntimeVersion = "11.0.0-rc.2.26504.105";
+    public const string Dotnet11SdkVersion = "11.0.100-rc.3.26522.148";
+    public const string Dotnet11RuntimeVersion = "11.0.0-rc.3.26522.148";
 
     public const string AlpineLatest = "alpine.3.23";
     public const string CentosLatest = "centos.stream.10";
