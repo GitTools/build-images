@@ -7,9 +7,13 @@ on:
     types:
       - completed
 
+permissions:
+  contents: read
+
 jobs:
   prepare:
     permissions:
+      contents: read
       packages: write
     name: Prepare Build
     runs-on: ubuntu-24.04
@@ -21,17 +25,17 @@ jobs:
     steps:
       - name: Checkout
         if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.head_repository.fork == false && github.event.workflow_run.head_repository.full_name == github.repository) }}
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Cache cake frosting
         id: cache-cake
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: run
           key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           global-json-file: build/global.json
 
