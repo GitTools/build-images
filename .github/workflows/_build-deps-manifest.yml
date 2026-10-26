@@ -16,6 +16,7 @@ env:
   PUSH_IMAGES: ${{ inputs.push_images }}
 
 permissions:
+  contents: read
   id-token: write
   packages: write
 
@@ -29,17 +30,17 @@ jobs:
         docker_distro: ${{ fromJson(inputs.docker_distros) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Use cached cake frosting
         id: cache-cake
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: run
           key: run-${{ runner.os }}-${{ hashFiles('./build/**') }}
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           global-json-file: build/global.json
 
