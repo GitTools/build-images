@@ -7,4 +7,13 @@ runs:
     - name: Set up Docker
       uses: docker/setup-docker-action@7ec28a010822b4626af4874f9448a4b05ac6f3e5 # v5
       with:
-        daemon-config: '{ "features": { "containerd-snapshotter": true } }'
+        daemon-config: |
+          {
+            "dns": ["1.1.1.1", "8.8.8.8"],
+            "features": {
+              "containerd-snapshotter": true
+            }
+          }
+    - name: Check build container DNS
+      shell: bash
+      run: bash "${{ github.action_path }}/check-dns.sh"
