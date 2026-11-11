@@ -1,6 +1,9 @@
 version: 2
 updates:
   - package-ecosystem: dotnet-sdk
+    cooldown:
+      exclude:
+        - "*"
     labels:
       - "dependencies"
     commit-message:
@@ -10,6 +13,10 @@ updates:
       interval: cron
       cronjob: "0 12 * * *"
   - package-ecosystem: nuget
+    cooldown:
+      exclude:
+        - "Microsoft.*"
+        - "System.*"
     labels:
       - "dependencies"
     commit-message:
