@@ -21,7 +21,7 @@ jobs:
       contents: read
       packages: write
     name: Prepare Build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       docker_distros: ${{ steps.set_matrix.outputs.docker_distros }}
     steps:
@@ -60,9 +60,9 @@ jobs:
       matrix:
         include:
           - arch: amd64
-            runner: ubuntu-24.04
+            runner: ubuntu-26.04
           - arch: arm64
-            runner: ubuntu-24.04-arm
+            runner: ubuntu-26.04-arm
     uses: ./.github/workflows/_build-deps.yml
     with:
       runner: ${{ matrix.runner }}
