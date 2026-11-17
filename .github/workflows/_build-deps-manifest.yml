@@ -23,7 +23,7 @@ permissions:
 jobs:
   build_deps_manifests:
     name: ${{ matrix.docker_distro }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     strategy:
       fail-fast: false
       matrix:
